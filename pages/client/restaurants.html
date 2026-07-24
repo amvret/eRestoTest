@@ -11,6 +11,13 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
   <link rel="stylesheet" href="../../css/main.css">
   <link rel="stylesheet" href="../../css/landing.css">
+
+  <!-- Preload the demo restaurant images so they load in parallel with
+       the page instead of only after the JS renders the cards. -->
+  <link rel="preload" as="image" href="../../assets/images/chitir-resto.jpg">
+  <link rel="preload" as="image" href="../../assets/images/le-verdoyant.jpg">
+  <link rel="preload" as="image" href="../../assets/images/leau-vive.jpg">
+  <link rel="preload" as="image" href="../../assets/images/belchicken-burkina.jpg">
   <style>
     .restaurants-page-header {
       padding: 60px 24px;

@@ -6,11 +6,32 @@
 'use strict';
 
 /* =====================================================
+   BASE PATH — makes the site portable to any hosting
+   subfolder (e.g. GitHub Pages project sites served at
+   https://user.github.io/repo-name/ instead of the domain
+   root). Every "absolute" internal link/image path in the
+   app is built from this instead of a hardcoded leading "/".
+   ===================================================== */
+const ERESTO_BASE = (function () {
+  const path = window.location.pathname;
+  const marker = '/pages/';
+  const idx = path.indexOf(marker);
+  if (idx !== -1) {
+    // Currently inside /pages/xxx/file.html -> site root is
+    // everything before "/pages/".
+    return path.substring(0, idx + 1);
+  }
+  // At the site root (index.html or similar).
+  return path.substring(0, path.lastIndexOf('/') + 1);
+})();
+window.ERESTO_BASE = ERESTO_BASE;
+
+/* =====================================================
    DEMO DATA — only loaded for the demo account
    ===================================================== */
 const ERESTO_DEMO_DATA = {
   restaurantName: 'Chitir Chicken (CTR)',
-  restaurantImage: '/assets/images/chitir-resto.png',
+  restaurantImage: `${ERESTO_BASE}assets/images/chitir-resto.jpg`,
   cuisineType: 'Fast-food • Poulet Frit',
   orders: [
     { id: '#C-1042', customer: 'Aminata Ouedraogo', status: 'ready',       total: 6_500, time: '12:34', items: ['1x Seau Familial Crispy (8 pièces)'] },
@@ -19,8 +40,8 @@ const ERESTO_DEMO_DATA = {
     { id: '#C-1045', customer: 'Ousmane Zoungrana', status: 'in_progress', total: 2_000, time: '13:02', items: ['1x Wrap Poulet Pané'] },
   ],
   menuItems: [
-    { id: 101, code: 'CTR-001', name: 'Menu Box Poulet Ail',             category: 'Poulet Frit',     price: 3_500, image: '/assets/images/chitir-chicken.jpg', available: true },
-    { id: 102, code: 'CTR-002', name: 'Seau Familial Crispy (8 pièces)', category: 'Poulet Frit',     price: 6_500, image: '/assets/images/chitir-chicken.jpg', available: true },
+    { id: 101, code: 'CTR-001', name: 'Menu Box Poulet Ail',             category: 'Poulet Frit',     price: 3_500, image: `${ERESTO_BASE}assets/images/chitir-chicken.jpg`, available: true },
+    { id: 102, code: 'CTR-002', name: 'Seau Familial Crispy (8 pièces)', category: 'Poulet Frit',     price: 6_500, image: `${ERESTO_BASE}assets/images/chitir-chicken.jpg`, available: true },
     { id: 103, code: 'CTR-003', name: 'Burger Chitir Spécial',          category: 'Burgers & Wraps', price: 2_500, image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?auto=format&fit=crop&w=600&q=80', available: true },
     { id: 104, code: 'CTR-004', name: 'Wrap Poulet Pané',               category: 'Burgers & Wraps', price: 2_000, image: 'https://images.unsplash.com/photo-1626700051175-6818013e1d4f?auto=format&fit=crop&w=600&q=80', available: true },
     { id: 105, code: 'CTR-005', name: 'Tenders de Poulet (5 pièces)',   category: 'Accompagnements', price: 2_500, image: 'https://images.unsplash.com/photo-1569058242253-92a9c755a0ec?auto=format&fit=crop&w=600&q=80', available: true },
@@ -66,6 +87,7 @@ const eResto = {
     this.initNavigation();
     this.initStatusPill();
     this.initMobileMenu();
+    this.initLandingNavMobile();
     this.initRestaurantEditButton();
     this.updateUserUI();
     console.log(`%ceResto v${this.version} initialized`, 'color: #f0603d; font-weight: bold;');
@@ -83,27 +105,27 @@ const eResto = {
     const path = window.location.pathname.toLowerCase();
     const user = this.state.currentUser;
 
-    const isAccessingAdmin = path.includes('/pages/admin/');
-    const isAccessingClientDash = path.includes('/pages/client/dashboard.html');
+    const isAccessingAdmin = path.includes(`${ERESTO_BASE}pages/admin/`);
+    const isAccessingClientDash = path.includes(`${ERESTO_BASE}pages/client/dashboard.html`);
 
     if (isAccessingAdmin) {
       if (!user) {
-        window.location.href = '/pages/auth/connexion.html';
+        window.location.href = `${ERESTO_BASE}pages/auth/connexion.html`;
         return;
       }
       if (user.type === 'client') {
-        window.location.href = '/index.html';
+        window.location.href = `${ERESTO_BASE}index.html`;
         return;
       }
     }
 
     if (isAccessingClientDash) {
       if (!user) {
-        window.location.href = '/pages/auth/connexion.html';
+        window.location.href = `${ERESTO_BASE}pages/auth/connexion.html`;
         return;
       }
       if (user.type === 'owner') {
-        window.location.href = '/pages/admin/dashboard.html';
+        window.location.href = `${ERESTO_BASE}pages/admin/dashboard.html`;
         return;
       }
     }
@@ -266,7 +288,7 @@ const eResto = {
         email, 
         type: 'owner',
         restaurantName: 'Chitir Chicken (CTR)',
-        restaurantImage: '/assets/images/chitir-resto.png'
+        restaurantImage: `${ERESTO_BASE}assets/images/chitir-resto.jpg`
       };
       localStorage.setItem('eresto_current_user', JSON.stringify(this.state.currentUser));
       this.loadUserData();
@@ -394,7 +416,7 @@ const eResto = {
     const landingActions = document.querySelector('.landing-nav-actions');
     if (landingActions) {
       if (user) {
-        const dashboardUrl = user.type === 'client' ? '/pages/client/dashboard.html' : '/pages/admin/dashboard.html';
+        const dashboardUrl = user.type === 'client' ? `${ERESTO_BASE}pages/client/dashboard.html` : `${ERESTO_BASE}pages/admin/dashboard.html`;
         const dashboardText = user.type === 'client' ? 'Mon Espace' : 'Espace Pro';
         landingActions.innerHTML = `
           <a href="${dashboardUrl}" class="btn-landing-solid" style="display:inline-flex;align-items:center;gap:6px;">
@@ -407,8 +429,8 @@ const eResto = {
         `;
       } else {
         landingActions.innerHTML = `
-          <a href="/pages/auth/connexion.html" class="btn-landing-outline">Connexion</a>
-          <a href="/pages/auth/inscription.html" class="btn-landing-solid">Inscription</a>
+          <a href="${ERESTO_BASE}pages/auth/connexion.html" class="btn-landing-outline">Connexion</a>
+          <a href="${ERESTO_BASE}pages/auth/inscription.html" class="btn-landing-solid">Inscription</a>
         `;
       }
     }
@@ -417,7 +439,7 @@ const eResto = {
   logout() {
     this.state.currentUser = null;
     localStorage.removeItem('eresto_current_user');
-    window.location.href = '/pages/auth/connexion.html';
+    window.location.href = `${ERESTO_BASE}pages/auth/connexion.html`;
   },
 
   /* =====================================================
@@ -487,8 +509,8 @@ const eResto = {
 
     // Ensure essential links exist (in case some pages missed them)
     const required = [
-      { page: 'horaires', href: '/pages/admin/horaires.html', icon: 'schedule', label: 'Horaires' },
-      { page: 'reservations', href: '/pages/admin/reservations.html', icon: 'event', label: 'Réservations' }
+      { page: 'horaires', href: `${ERESTO_BASE}pages/admin/horaires.html`, icon: 'schedule', label: 'Horaires' },
+      { page: 'reservations', href: `${ERESTO_BASE}pages/admin/reservations.html`, icon: 'event', label: 'Réservations' }
     ];
     const nav = document.querySelector('.sidebar-nav');
     if (nav) {
@@ -623,6 +645,48 @@ const eResto = {
         overlay.classList.remove('active');
       });
     }
+  },
+
+  // Injects a hamburger toggle into the public header (.landing-nav) on
+  // every page that has one, so the nav links + auth buttons collapse
+  // into a dropdown menu on small screens instead of overflowing.
+  initLandingNavMobile() {
+    const nav = document.querySelector('.landing-nav');
+    if (!nav || nav.querySelector('.landing-nav-toggle')) return;
+
+    const toggleBtn = document.createElement('button');
+    toggleBtn.type = 'button';
+    toggleBtn.className = 'landing-nav-toggle';
+    toggleBtn.setAttribute('aria-label', 'Ouvrir le menu');
+    toggleBtn.setAttribute('aria-expanded', 'false');
+    toggleBtn.innerHTML = '<span class="material-symbols-outlined">menu</span>';
+    nav.appendChild(toggleBtn);
+
+    toggleBtn.addEventListener('click', () => {
+      const isOpen = nav.classList.toggle('nav-open');
+      toggleBtn.setAttribute('aria-expanded', String(isOpen));
+      toggleBtn.innerHTML = isOpen
+        ? '<span class="material-symbols-outlined">close</span>'
+        : '<span class="material-symbols-outlined">menu</span>';
+    });
+
+    // Close the menu after tapping a link, and whenever the viewport is
+    // widened back past the mobile breakpoint.
+    nav.querySelectorAll('.landing-nav-link, .landing-nav-actions a, .landing-nav-actions button').forEach(el => {
+      el.addEventListener('click', () => {
+        nav.classList.remove('nav-open');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.innerHTML = '<span class="material-symbols-outlined">menu</span>';
+      });
+    });
+
+    window.addEventListener('resize', () => {
+      if (window.innerWidth > 860) {
+        nav.classList.remove('nav-open');
+        toggleBtn.setAttribute('aria-expanded', 'false');
+        toggleBtn.innerHTML = '<span class="material-symbols-outlined">menu</span>';
+      }
+    });
   },
 
   /* =====================================================

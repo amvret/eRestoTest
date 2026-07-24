@@ -113,6 +113,13 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  overflow-x: hidden;
+}
+
+img, video, svg {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 body {
@@ -123,6 +130,7 @@ body {
   background-color: var(--background);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
   opacity: 0;
   transition: opacity 0.2s ease-out;
 }
@@ -830,12 +838,14 @@ input, select, textarea {
   background: var(--surface-container-lowest);
   border-radius: var(--radius-xl);
   border: 1px solid var(--outline-variant);
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   box-shadow: var(--shadow-card);
 }
 
 .data-table {
   width: 100%;
+  min-width: 640px;
   border-collapse: collapse;
 }
 

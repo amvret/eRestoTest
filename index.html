@@ -11,6 +11,14 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
   <link rel="stylesheet" href="css/main.css">
   <link rel="stylesheet" href="css/landing.css">
+
+  <!-- Preload critical images so they load in parallel with the page,
+       not only after the JS has finished building the DOM. -->
+  <link rel="preload" as="image" href="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1000&q=80" fetchpriority="high">
+  <link rel="preload" as="image" href="assets/images/chitir-resto.jpg">
+  <link rel="preload" as="image" href="assets/images/le-verdoyant.jpg">
+  <link rel="preload" as="image" href="assets/images/leau-vive.jpg">
+  <link rel="preload" as="image" href="assets/images/belchicken-burkina.jpg">
 </head>
 <body class="landing-page">
 
@@ -69,6 +77,10 @@
           src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=1000&q=80"
           alt="Table garnie de délicieux plats"
           class="hero-img"
+          fetchpriority="high"
+          decoding="async"
+          width="1000"
+          height="380"
         >
       </div>
     </section>

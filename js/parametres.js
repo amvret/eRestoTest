@@ -382,7 +382,7 @@ async function confirmDeleteAccount() {
     eResto.showToast('Compte supprimé. À bientôt !', 'error');
     setTimeout(() => {
       localStorage.clear();
-      window.location.href = '/pages/auth/connexion.html';
+      window.location.href = `${ERESTO_BASE}pages/auth/connexion.html`;
     }, 1500);
   }
 }

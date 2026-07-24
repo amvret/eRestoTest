@@ -226,10 +226,10 @@ async function handleRegister(e) {
             localStorage.removeItem('eresto_return_url');
             window.location.href = returnUrl;
           } else {
-            window.location.href = '/index.html';
+            window.location.href = `${ERESTO_BASE}index.html`;
           }
         } else {
-          window.location.href = '/pages/admin/dashboard.html';
+          window.location.href = `${ERESTO_BASE}pages/admin/dashboard.html`;
         }
       }, 1500);
     } else {

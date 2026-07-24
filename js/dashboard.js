@@ -392,11 +392,11 @@ function renderFilteredOrders(orders) {
 // UTILITY ACTIONS
 // =====================================================
 function viewAllOrders() {
-  window.location.href = '/pages/admin/commandes.html';
+  window.location.href = `${ERESTO_BASE}pages/admin/commandes.html`;
 }
 
 function openNewOrderModal() {
-  window.location.href = '/pages/admin/commandes.html';
+  window.location.href = `${ERESTO_BASE}pages/admin/commandes.html`;
   // The commandes page will auto-open the new order modal via hash
   sessionStorage.setItem('eresto_open_modal', 'new_order');
 }
@@ -419,7 +419,7 @@ function exportData() {
 }
 
 function updateHours() {
-  window.location.href = '/pages/admin/horaires.html';
+  window.location.href = `${ERESTO_BASE}pages/admin/horaires.html`;
 }
 
 // =====================================================

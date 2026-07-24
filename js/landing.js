@@ -12,7 +12,7 @@ const DEFAULT_RESTAURANTS = [
     category: 'Fast-food • Poulet Frit',
     rating: 4.8,
     status: 'open',
-    image: '/assets/images/chitir-resto.png',
+    image: `${ERESTO_BASE}assets/images/chitir-resto.jpg`,
   },
   {
     id: 'demo-2',
@@ -20,7 +20,7 @@ const DEFAULT_RESTAURANTS = [
     category: 'Grillades • Poulet Bicyclette',
     rating: 4.9,
     status: 'open',
-    image: '/assets/images/le-verdoyant.jpg',
+    image: `${ERESTO_BASE}assets/images/le-verdoyant.jpg`,
   },
   {
     id: 'demo-3',
@@ -28,7 +28,7 @@ const DEFAULT_RESTAURANTS = [
     category: 'Gastronomie & Spécialités Burkinabè',
     rating: 4.9,
     status: 'open',
-    image: '/assets/images/leau-vive.jpg',
+    image: `${ERESTO_BASE}assets/images/leau-vive.jpg`,
   },
 
   {
@@ -37,7 +37,7 @@ const DEFAULT_RESTAURANTS = [
     category: 'Fast-food • Poulet Frit & Burgers',
     rating: 4.1,
     status: 'open',
-    image: '/assets/images/belchicken-burkina.png',
+    image: `${ERESTO_BASE}assets/images/belchicken-burkina.jpg`,
   },
 ];
 
@@ -132,7 +132,7 @@ function renderRestaurants() {
   }
 
   container.innerHTML = displayed.map(r => `
-    <a href="/pages/public/restaurant-detail.html?id=${r.id}" class="restaurant-card">
+    <a href="${ERESTO_BASE}pages/public/restaurant-detail.html?id=${r.id}" class="restaurant-card">
       <div class="restaurant-img-wrapper">
         <img src="${r.image}" alt="${r.name}" class="restaurant-img" loading="lazy">
       </div>

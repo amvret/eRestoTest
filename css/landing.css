@@ -502,11 +502,80 @@
   color: #ffffff;
 }
 
+/* ---- Mobile nav toggle (hidden on desktop) ---- */
+.landing-nav-toggle {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border: none;
+  background: transparent;
+  color: #1c1b1b;
+  cursor: pointer;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.landing-nav-toggle:hover {
+  background: rgba(0, 0, 0, 0.05);
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .hero-section { grid-template-columns: 1fr; }
   .restaurants-grid { grid-template-columns: repeat(2, 1fr); }
   .features-grid { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 860px) {
+  .landing-nav {
+    flex-wrap: wrap;
+    position: relative;
+  }
+
+  .landing-nav-toggle {
+    display: flex;
+    order: 1;
+    margin-left: auto;
+  }
+
+  .landing-brand { order: 0; }
+
+  .landing-nav-links,
+  .landing-nav-actions {
+    flex-basis: 100%;
+    order: 2;
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    width: 100%;
+    padding-top: 16px;
+  }
+
+  .landing-nav.nav-open .landing-nav-links,
+  .landing-nav.nav-open .landing-nav-actions {
+    display: flex;
+  }
+
+  .landing-nav-actions {
+    padding-top: 8px;
+    padding-bottom: 8px;
+    border-top: 1px solid rgba(0, 0, 0, 0.06);
+    margin-top: 8px;
+  }
+
+  .landing-nav-link {
+    padding: 10px 4px;
+    border-radius: 8px;
+  }
+
+  .btn-landing-outline,
+  .btn-landing-solid {
+    width: 100%;
+    text-align: center;
+  }
 }
 
 @media (max-width: 640px) {
@@ -516,4 +585,9 @@
   .restaurants-grid { grid-template-columns: 1fr; }
   .promo-banner { flex-direction: column; gap: 20px; text-align: center; }
   .footer-inner { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 400px) {
+  .features-grid { gap: 16px; }
+  .hero-img { height: 240px; }
 }

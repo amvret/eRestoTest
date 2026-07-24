@@ -319,3 +319,45 @@
   border-radius: 24px;
   border: 1px solid rgba(0,0,0,0.04);
 }
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 768px) {
+  .client-hero-content,
+  .client-container {
+    padding: 0 20px;
+  }
+
+  .client-title { font-size: 26px; }
+
+  .client-tabs {
+    gap: 4px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .client-tabs::-webkit-scrollbar { display: none; }
+
+  .client-tab {
+    padding: 12px 16px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .client-review-card { padding: 22px; }
+
+  .order-card-header,
+  .order-card-footer {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 480px) {
+  .client-hero { padding: 32px 0; }
+  .client-avatar { width: 52px; height: 52px; font-size: 22px; }
+  .client-title { font-size: 22px; }
+  .rd-modal { padding: 22px; }
+}

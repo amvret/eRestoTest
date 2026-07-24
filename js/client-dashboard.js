@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Enforce login as client
   if (!user) {
-    window.location.href = '/pages/auth/connexion.html';
+    window.location.href = `${ERESTO_BASE}pages/auth/connexion.html`;
     return;
   }
 
@@ -121,7 +121,7 @@ function loadClientOrders() {
         <span class="material-symbols-outlined" style="font-size:48px;color:#d1d5db;margin-bottom:12px;display:block">receipt_long</span>
         <h3 style="font-family:var(--font-display);font-size:18px;font-weight:800;color:#1c1b1b;margin-bottom:6px">Aucune commande enregistrée</h3>
         <p style="font-size:14px;color:#6b554f;margin-bottom:20px;">Vous n'avez pas encore passé de commande sur eResto.</p>
-        <a href="/pages/client/restaurants.html" class="rd-btn rd-btn-primary" style="display:inline-flex;width:auto;padding:12px 24px;">Découvrir les restaurants</a>
+        <a href="${ERESTO_BASE}pages/client/restaurants.html" class="rd-btn rd-btn-primary" style="display:inline-flex;width:auto;padding:12px 24px;">Découvrir les restaurants</a>
       </div>
     `;
     return;
@@ -198,7 +198,7 @@ function loadClientReservations() {
         <span class="material-symbols-outlined" style="font-size:48px;color:#d1d5db;margin-bottom:12px;display:block">event_seat</span>
         <h3 style="font-family:var(--font-display);font-size:18px;font-weight:800;color:#1c1b1b;margin-bottom:6px">Aucune réservation de table</h3>
         <p style="font-size:14px;color:#6b554f;margin-bottom:20px;">Vous n'avez pas encore réservé de table.</p>
-        <a href="/pages/client/restaurants.html" class="rd-btn rd-btn-primary" style="display:inline-flex;width:auto;padding:12px 24px;">Réserver une table</a>
+        <a href="${ERESTO_BASE}pages/client/restaurants.html" class="rd-btn rd-btn-primary" style="display:inline-flex;width:auto;padding:12px 24px;">Réserver une table</a>
       </div>
     `;
     return;
@@ -298,7 +298,7 @@ function loadClientReviews() {
         <span class="material-symbols-outlined" style="font-size:56px;color:#e2c4b8;display:block;margin-bottom:16px;">rate_review</span>
         <h3 style="font-family:var(--font-display);font-size:18px;font-weight:800;color:#1c1b1b;margin-bottom:6px;">Aucun avis publié</h3>
         <p style="font-size:14px;color:#6b554f;margin-bottom:20px;">Vous n'avez pas encore laissé d'avis sur un restaurant.</p>
-        <a href="/pages/client/restaurants.html" class="rd-btn rd-btn-primary" style="display:inline-flex;width:auto;padding:12px 24px;">Découvrir les restaurants</a>
+        <a href="${ERESTO_BASE}pages/client/restaurants.html" class="rd-btn rd-btn-primary" style="display:inline-flex;width:auto;padding:12px 24px;">Découvrir les restaurants</a>
       </div>
     `;
     return;

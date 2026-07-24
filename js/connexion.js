@@ -31,9 +31,9 @@ document.addEventListener('DOMContentLoaded', () => {
       const user = JSON.parse(saved);
       if (user && user.id) {
         if (user.type === 'client') {
-          window.location.href = '/index.html';
+          window.location.href = `${ERESTO_BASE}index.html`;
         } else {
-          window.location.href = '/pages/admin/dashboard.html';
+          window.location.href = `${ERESTO_BASE}pages/admin/dashboard.html`;
         }
         return;
       }
@@ -160,10 +160,10 @@ async function handleLogin(e) {
             localStorage.removeItem('eresto_return_url');
             window.location.href = returnUrl;
           } else {
-            window.location.href = '/index.html';
+            window.location.href = `${ERESTO_BASE}index.html`;
           }
         } else {
-          window.location.href = '/pages/admin/dashboard.html';
+          window.location.href = `${ERESTO_BASE}pages/admin/dashboard.html`;
         }
       }, 800);
 

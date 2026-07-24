@@ -20,7 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const restId = urlParams.get('id');
 
   if (!restId) {
-    window.location.href = '/pages/client/restaurants.html';
+    window.location.href = `${ERESTO_BASE}pages/client/restaurants.html`;
     return;
   }
 
@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const restaurant = allRestaurants.find(r => r.id === restId);
 
   if (!restaurant) {
-    window.location.href = '/pages/client/restaurants.html';
+    window.location.href = `${ERESTO_BASE}pages/client/restaurants.html`;
     return;
   }
 
@@ -119,7 +119,7 @@ const DEMO_MENUS = {
       price: 3500, 
       description: '3 pièces de poulet frit mariné à l\'ail, grande portion de frites croustillantes et boisson 33cl.', 
       available: true,
-      image: '/assets/images/chitir-chicken.jpg',
+      image: `${ERESTO_BASE}assets/images/chitir-chicken.jpg`,
       badge: 'BEST-SELLER',
       badgeClass: 'dish-badge-bestseller',
       popularity: 98
@@ -131,7 +131,7 @@ const DEMO_MENUS = {
       price: 6500, 
       description: '8 pièces de poulet extra croustillant épicé ou doux, 2 grandes frites et 2 boissons.', 
       available: true,
-      image: '/assets/images/chitir-chicken.jpg',
+      image: `${ERESTO_BASE}assets/images/chitir-chicken.jpg`,
       badge: 'POPULAIRE',
       badgeClass: 'dish-badge-popular',
       popularity: 92
@@ -838,7 +838,7 @@ function redirectToLogin() {
     cart: cart
   }));
   localStorage.setItem('eresto_return_url', window.location.href);
-  window.location.href = '/pages/auth/connexion.html';
+  window.location.href = `${ERESTO_BASE}pages/auth/connexion.html`;
 }
 
 function redirectToRegister() {
@@ -847,7 +847,7 @@ function redirectToRegister() {
     cart: cart
   }));
   localStorage.setItem('eresto_return_url', window.location.href);
-  window.location.href = '/pages/auth/inscription.html';
+  window.location.href = `${ERESTO_BASE}pages/auth/inscription.html`;
 }
 
 function handleOrderSubmit(e) {
