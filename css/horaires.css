@@ -1,0 +1,221 @@
+/* =====================================================
+   eResto - Horaires Page Styles
+   ===================================================== */
+
+/* ---- Status Banner ---- */
+.status-banner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px;
+  border-radius: var(--radius-xl);
+  font-weight: 700;
+  font-size: 15px;
+  margin-bottom: 24px;
+  animation: fadeIn 0.4s ease;
+}
+.status-banner.open     { background: #d1fae520; color: var(--brand-green); border: 1.5px solid var(--brand-green); }
+.status-banner.closed   { background: #fee2e220; color: var(--error);       border: 1.5px solid var(--error); }
+.status-banner.pause    { background: #fef3c720; color: #d97706;            border: 1.5px solid #f59e0b; }
+.status-banner.upcoming { background: #ede9fe20; color: #7c3aed;            border: 1.5px solid #8b5cf6; }
+
+/* ---- Workday selector bar ---- */
+.workday-selector-card {
+  background: var(--surface);
+  border: 1.5px solid var(--outline-variant);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+.workday-title {
+  font-family: var(--font-display);
+  font-size: 15px;
+  font-weight: 800;
+  margin-bottom: 4px;
+}
+.workday-subtitle {
+  font-size: 13px;
+  color: var(--on-surface-variant);
+  margin-bottom: 16px;
+  opacity: 0.8;
+}
+
+.day-chips-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.day-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 18px;
+  border-radius: var(--radius-lg);
+  border: 1.5px solid var(--outline-variant);
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  user-select: none;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.day-chip:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+}
+
+.day-chip.active {
+  background: #d1fae525;
+  border-color: var(--brand-green);
+  color: var(--brand-green);
+  box-shadow: 0 2px 8px rgba(22, 163, 74, 0.15);
+}
+
+.day-chip .chip-icon {
+  font-size: 16px;
+  transition: transform 0.2s;
+}
+.day-chip.active .chip-icon {
+  color: var(--brand-green);
+}
+
+/* ---- Preset buttons ---- */
+.preset-row {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 20px;
+}
+
+/* ---- Section Headers ---- */
+.horaires-section-title {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  margin: 28px 0 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ---- Grid ---- */
+.horaires-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+}
+
+/* ---- Card ---- */
+.horaire-card {
+  background: var(--surface);
+  border: 1.5px solid var(--outline-variant);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+  transition: border-color 0.25s, box-shadow 0.25s, opacity 0.25s;
+}
+.horaire-card.open   { border-color: var(--brand-green); box-shadow: 0 0 0 3px #16a34a18; }
+.horaire-card.closed { opacity: 0.65; background: var(--surface-container-low); border-style: dashed; }
+
+.horaire-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+.horaire-day {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 800;
+  margin: 0;
+}
+.horaire-status-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  margin: 2px 0 0;
+}
+.horaire-status-label.open   { color: var(--brand-green); }
+.horaire-status-label.closed { color: var(--on-surface-variant); opacity: 0.5; }
+
+/* ---- Times section ---- */
+.horaire-times { animation: fadeIn 0.2s ease; }
+.horaire-times.hidden { display: none; }
+
+.time-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+.time-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  flex: 1;
+}
+.time-label {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--on-surface-variant);
+  opacity: 0.7;
+}
+.time-separator {
+  font-size: 16px;
+  color: var(--on-surface-variant);
+  opacity: 0.4;
+  margin-top: 16px;
+}
+.time-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1.5px solid var(--outline-variant);
+  border-radius: var(--radius-md);
+  background: var(--surface-container);
+  color: var(--on-surface);
+  font-size: 14px;
+  font-family: var(--font-body);
+  font-weight: 600;
+  cursor: pointer;
+  transition: border-color 0.2s;
+}
+.time-input:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+.time-input.sm {
+  width: auto;
+  flex: 1;
+  padding: 6px 10px;
+  font-size: 13px;
+}
+
+/* ---- Pause section ---- */
+.pause-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding-top: 12px;
+  border-top: 1px solid var(--outline-variant);
+}
+.pause-toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+}
+.pause-checkbox { accent-color: var(--primary); width: 15px; height: 15px; cursor: pointer; }
+.pause-times {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.pause-times.hidden { display: none; }

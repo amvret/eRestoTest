@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inscription - eResto</title>
+
+    <link rel="stylesheet" href="style.css">
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header class="header">
+
+    <h1 class="logo">eResto</h1>
+
+    <nav>
+        <a href="connexion.html">Connexion</a>
+        <a href="inscription.html">Inscription</a>
+    </nav>
+
+</header>
+
+<section class="form-container">
+
+    <div class="card">
+
+        <h2>Inscription d'un Restaurant</h2>
+
+        <form id="registerForm">
+
+            <label>Nom du restaurant</label>
+            <input type="text" id="restaurant" required>
+
+            <label>Type de cuisine</label>
+            <input type="text" id="cuisine" required>
+
+            <label>Adresse</label>
+            <input type="text" id="adresse" required>
+
+            <label>Téléphone</label>
+            <input type="text" id="telephone" required>
+
+            <label>Email</label>
+            <input type="email" id="email" required>
+
+            <label>Mot de passe</label>
+            <input type="password" id="password" required>
+
+            <button class="btn" type="submit">
+                S'inscrire
+            </button>
+
+        </form>
+
+        <p>
+            Déjà inscrit ?
+            <a href="connexion.html">Se connecter</a>
+        </p>
+
+    </div>
+
+</section>
+
+<script src="script.js"></script>
+
+</body>
+</html>

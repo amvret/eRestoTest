@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Connexion | eResto - Portail Restaurateur</title>
+  <meta name="description" content="Connectez-vous à votre portail restaurateur eResto pour gérer vos commandes, votre menu et vos performances.">
+
+  <!-- Design system CSS -->
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/landing.css">
+  <!-- Page-specific CSS -->
+  <link rel="stylesheet" href="../../css/auth.css">
+</head>
+<body class="auth-body">
+
+  <!-- Header Navbar -->
+  <header style="background: #fdf5f2; border-bottom: 1px solid rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
+    <nav class="landing-nav">
+      <a href="../../index.html" class="landing-brand">
+        <span class="material-symbols-outlined landing-brand-icon">restaurant</span>
+        eRESTO
+      </a>
+
+      <ul class="landing-nav-links">
+        <li><a href="../../index.html" class="landing-nav-link active">Accueil</a></li>
+        <li><a href="../../pages/client/restaurants.html" class="landing-nav-link">Restaurants</a></li>
+        <li><a href="../../pages/public/a-propos.html" class="landing-nav-link">À propos</a></li>
+      </ul>
+
+      <div class="landing-nav-actions">
+        <a href="../../pages/auth/connexion.html" class="btn-landing-outline">Connexion</a>
+        <a href="../../pages/auth/inscription.html" class="btn-landing-solid">Inscription</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Background decorative elements -->
+  <div class="auth-bg-pattern" aria-hidden="true"></div>
+
+  <!-- Main layout -->
+  <div class="auth-container">
+
+    <!-- Left: Brand panel -->
+    <section class="auth-panel" aria-label="Présentation eResto">
+      <div class="auth-panel-inner">
+        <!-- Logo -->
+        <div class="auth-logo">
+          <span class="material-symbols-outlined filled" style="font-size:32px">restaurant</span>
+          <span>eResto</span>
+        </div>
+
+        <!-- Headline -->
+        <div class="auth-panel-content">
+          <h1 class="auth-headline">Bon retour parmi nous !</h1>
+          <p class="auth-subline">
+            Gérez vos commandes, votre menu et vos performances en un seul endroit. La gestion simplifiée pour faire briller votre établissement.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: Login form -->
+    <section class="auth-form-section">
+      <div class="auth-form-wrapper">
+
+        <header class="auth-form-header">
+          <h2 class="auth-form-title">Connexion</h2>
+          <p class="auth-form-subtitle">Accédez à votre portail restaurateur eResto</p>
+        </header>
+
+        <!-- Demo credentials hint -->
+        <div class="demo-hint" id="demo-hint">
+          <span class="material-symbols-outlined" style="font-size:16px;color:var(--primary)">info</span>
+          <span>Compte Démo (Chitir Chicken) : <strong>demo@eresto.com</strong> / <strong>demo1234</strong></span>
+          <button onclick="fillDemoCredentials()" class="demo-fill-btn" type="button">Remplir</button>
+        </div>
+
+        <!-- Alert messages -->
+        <div class="form-alert hidden" id="login-alert" role="alert">
+          <span class="material-symbols-outlined" style="font-size:18px">error</span>
+          <span id="login-alert-msg"></span>
+        </div>
+
+        <form id="login-form" class="auth-form" novalidate>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label" for="login-email">
+              Email
+            </label>
+            <div class="input-wrapper has-icon-left">
+              <span class="material-symbols-outlined input-icon-left">mail</span>
+              <input
+                class="form-input"
+                type="email"
+                id="login-email"
+                name="email"
+                autocomplete="email"
+                placeholder="nom@etablissement.fr"
+                required
+              >
+            </div>
+            <span class="form-error hidden" id="email-error">
+              <span class="material-symbols-outlined" style="font-size:14px">error</span>
+              Veuillez entrer un email valide.
+            </span>
+          </div>
+
+          <!-- Password -->
+          <div class="form-group">
+            <div style="display:flex;align-items:center;justify-content:space-between;">
+              <label class="form-label" for="login-password">Mot de passe</label>
+              <a href="#" class="forgot-link" id="forgot-link" onclick="handleForgotPassword(event)">Mot de passe oublié ?</a>
+            </div>
+            <div class="input-wrapper has-icon-left has-icon-right">
+              <span class="material-symbols-outlined input-icon-left">lock</span>
+              <input
+                class="form-input"
+                type="password"
+                id="login-password"
+                name="password"
+                autocomplete="current-password"
+                placeholder="••••••••"
+                required
+              >
+              <button
+                type="button"
+                class="input-icon-right"
+                id="toggle-password"
+                aria-label="Afficher/masquer le mot de passe"
+                onclick="togglePasswordVisibility('login-password', this)"
+              >
+                <span class="material-symbols-outlined" style="font-size:20px">visibility</span>
+              </button>
+            </div>
+            <span class="form-error hidden" id="password-error">
+              <span class="material-symbols-outlined" style="font-size:14px">error</span>
+              Le mot de passe est requis.
+            </span>
+          </div>
+
+          <!-- Submit button -->
+          <button
+            type="submit"
+            class="btn btn-primary btn-lg submit-btn"
+            id="login-submit"
+            style="width:100%;margin-top:16px;border-radius:8px;background-color:#a52d0e;"
+          >
+            <span class="btn-text">SE CONNECTER</span>
+            <span class="material-symbols-outlined" style="font-size:20px;margin-left:4px;">login</span>
+            <span class="btn-spinner hidden">
+              <span class="spinner"></span>
+            </span>
+          </button>
+
+        </form>
+
+        <footer class="auth-form-footer" style="border-top:none;margin-top:24px;">
+          <p>Pas encore de compte ? <a href="../../pages/auth/inscription.html" class="auth-link" style="color:#a52d0e;">S'inscrire</a></p>
+        </footer>
+
+      </div>
+    </section>
+
+  </div>
+
+  <!-- Global footer hidden for this view -->
+  <footer class="auth-global-footer" style="display:none;">
+    <div class="auth-footer-brand">eResto</div>
+    <nav class="auth-footer-links" aria-label="Liens du pied de page">
+      <a href="#">Mentions Légales</a>
+      <a href="#">Confidentialité</a>
+      <a href="#">Contact</a>
+      <a href="#">Aide</a>
+    </nav>
+    <p class="auth-footer-copy">© 2024 eResto. Tous droits réservés.</p>
+  </footer>
+
+  <!-- Toast container (injected by app.js) -->
+  <div id="toast-container"></div>
+
+  <!-- Scripts -->
+  <script src="../../js/app.js"></script>
+  <script src="../../js/connexion.js"></script>
+</body>
+</html>

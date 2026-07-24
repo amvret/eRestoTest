@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Espace Client | eResto</title>
+  <meta name="description" content="Gérez vos commandes, vos réservations et vos avis sur vos restaurants préférés.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/landing.css">
+  <link rel="stylesheet" href="../../css/client-dashboard.css">
+</head>
+<body class="landing-page">
+
+  <!-- Header Navbar -->
+  <header style="background: #fdf5f2; border-bottom: 1px solid rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
+    <nav class="landing-nav">
+      <a href="../../index.html" class="landing-brand">
+        <span class="material-symbols-outlined landing-brand-icon">restaurant</span>
+        eRESTO
+      </a>
+      <ul class="landing-nav-links">
+        <li><a href="../../index.html" class="landing-nav-link">Accueil</a></li>
+        <li><a href="../../pages/client/restaurants.html" class="landing-nav-link">Restaurants</a></li>
+      </ul>
+      <div class="landing-nav-actions">
+        <!-- Dynamically rendered user actions -->
+      </div>
+    </nav>
+  </header>
+
+  <!-- Client Hero Section -->
+  <div class="client-hero">
+    <div class="client-hero-content">
+      <div style="display:flex;align-items:center;gap:16px;">
+        <div id="client-avatar" class="client-avatar">C</div>
+        <div>
+          <h1 id="client-welcome-name" class="client-title">Bonjour !</h1>
+          <p class="client-subtitle" id="client-welcome-email">Espace personnel client eResto</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Main Container -->
+  <main class="client-container">
+    
+    <!-- Tab Navigation -->
+    <div class="client-tabs">
+      <button class="client-tab active" id="tab-btn-orders" onclick="switchClientTab('orders')">
+        <span class="material-symbols-outlined">package_2</span>
+        Mes Commandes (<span id="count-orders">0</span>)
+      </button>
+      <button class="client-tab" id="tab-btn-reservations" onclick="switchClientTab('reservations')">
+        <span class="material-symbols-outlined">event_seat</span>
+        Mes Réservations (<span id="count-reservations">0</span>)
+      </button>
+      <button class="client-tab" id="tab-btn-reviews" onclick="switchClientTab('reviews')">
+        <span class="material-symbols-outlined">star</span>
+        Mes Avis (<span id="count-reviews">0</span>)
+      </button>
+    </div>
+
+    <!-- Tab 1: Orders History -->
+    <section id="tab-content-orders" class="client-tab-content active">
+      <div class="client-section-header">
+        <h2>Historique de vos Commandes</h2>
+        <p>Suivez le statut de vos commandes actuelles et passées.</p>
+      </div>
+
+      <div id="client-orders-list" class="client-cards-grid">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- Tab 2: Reservations History -->
+    <section id="tab-content-reservations" class="client-tab-content">
+      <div class="client-section-header">
+        <h2>Vos Réservations de Table</h2>
+        <p>Retrouvez l'historique de vos tables réservées.</p>
+      </div>
+
+      <div id="client-reservations-list" class="client-cards-grid">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+    <!-- Tab 3: Reviews History -->
+    <section id="tab-content-reviews" class="client-tab-content">
+      <div class="client-section-header">
+        <h2>Historique de vos Avis</h2>
+        <p>Retrouvez tous les avis et évaluations que vous avez publiés.</p>
+      </div>
+
+      <div id="client-reviews-list" class="client-cards-grid">
+        <!-- Injected via JS -->
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Review Modal for direct order review -->
+  <div id="quick-review-modal" class="rd-modal-overlay">
+    <div class="rd-modal" style="max-width:480px;">
+      <h2 style="font-family:var(--font-display);font-weight:800;font-size:22px;margin-bottom:8px;">Évaluer votre commande</h2>
+      <p style="font-size:14px;color:#6b554f;margin-bottom:20px;">Laissez une note pour <strong id="qr-rest-name">Restaurant</strong></p>
+      
+      <form onsubmit="handleQuickReviewSubmit(event)">
+        <input type="hidden" id="qr-rest-id">
+        <div class="rd-form-group">
+          <label class="rd-form-label">Note :</label>
+          <div class="star-rating-selector">
+            <span class="star-btn-q active" data-val="1" onclick="setQuickRating(1)">★</span>
+            <span class="star-btn-q active" data-val="2" onclick="setQuickRating(2)">★</span>
+            <span class="star-btn-q active" data-val="3" onclick="setQuickRating(3)">★</span>
+            <span class="star-btn-q active" data-val="4" onclick="setQuickRating(4)">★</span>
+            <span class="star-btn-q active" data-val="5" onclick="setQuickRating(5)">★</span>
+            <strong id="qr-rating-text" style="margin-left:12px;color:var(--primary)">5 / 5</strong>
+          </div>
+        </div>
+
+        <div class="rd-form-group">
+          <label class="rd-form-label">Commentaire :</label>
+          <textarea id="qr-comment" class="rd-form-input" rows="3" placeholder="Votre avis sur la commande..." required></textarea>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:16px;">
+          <button type="button" class="rd-btn rd-btn-outline" style="flex:1" onclick="document.getElementById('quick-review-modal').classList.remove('active')">Annuler</button>
+          <button type="submit" class="rd-btn rd-btn-primary" style="flex:1">Envoyer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">eResto</div>
+        <p class="footer-tagline">Votre espace client personnel.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../js/app.js"></script>
+  <script src="../../js/landing.js"></script>
+  <script src="../../js/client-dashboard.js"></script>
+</body>
+</html>

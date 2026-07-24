@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Commandes | eResto Admin</title>
+  <meta name="description" content="Gérez toutes les commandes de votre restaurant en temps réel.">
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+  <link rel="stylesheet" href="../../css/commandes.css">
+</head>
+<body class="admin-body">
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="material-symbols-outlined filled" style="font-size:26px;color:var(--primary)">restaurant</span>
+      eResto
+    </div>
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="../../pages/admin/dashboard.html" data-page="dashboard"><span class="material-symbols-outlined">dashboard</span><span>Dashboard</span></a>
+      <a class="nav-item" href="../../pages/admin/menu.html" data-page="menu"><span class="material-symbols-outlined">restaurant_menu</span><span>Menu</span></a>
+      <a class="nav-item active" href="../../pages/admin/commandes.html" data-page="commandes">
+        <span class="material-symbols-outlined">receipt_long</span><span>Commandes</span>
+      </a>
+      <a class="nav-item" href="../../pages/admin/reservations.html" data-page="reservations"><span class="material-symbols-outlined">event</span><span>Réservations</span></a>
+      <a class="nav-item" href="../../pages/admin/equipe.html" data-page="equipe"><span class="material-symbols-outlined">group</span><span>Équipe</span></a>
+      <a class="nav-item" href="../../pages/admin/horaires.html" data-page="horaires"><span class="material-symbols-outlined">schedule</span><span>Horaires</span></a>
+    </nav>
+    <div class="sidebar-footer">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--radius-lg);background:var(--surface-container);margin-bottom:8px">
+        <div class="topbar-user-avatar" id="sidebar-avatar" style="background:var(--primary);width:36px;height:36px;font-size:12px">?</div>
+        <div style="flex:1;min-width:0">
+          <p class="topbar-user-name" id="sidebar-user-name">Utilisateur</p>
+          <p class="topbar-user-role" id="sidebar-user-email">demo@eresto.com</p>
+        </div>
+      </div>
+      <a class="nav-item danger" href="#" onclick="eResto.logout()"><span class="material-symbols-outlined">logout</span><span>Déconnexion</span></a>
+    </div>
+  </aside>
+
+  <div class="main-content">
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:16px">
+        <button class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="Menu"><span class="material-symbols-outlined">menu</span></button>
+        <div class="topbar-search">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" id="orders-search" placeholder="Rechercher ID, client..." aria-label="Rechercher une commande">
+        </div>
+      </div>
+      <div class="topbar-right">
+        <div style="position:relative">
+          <div class="status-pill open" id="restaurant-status" role="button" tabindex="0">
+            <div class="status-dot open"></div>
+            <div><span class="text-eyebrow" style="display:block;font-size:9px;opacity:0.6">Statut</span><span class="status-text open">Ouvert</span></div>
+            <span class="material-symbols-outlined" style="font-size:16px;color:var(--brand-green)">expand_more</span>
+          </div>
+          <div class="status-dropdown" id="status-menu">
+            <button class="status-option" onclick="eResto.setRestaurantStatus('open')"><div class="status-option-dot" style="background:var(--brand-green)"></div>Ouvert</button>
+            <button class="status-option" onclick="eResto.setRestaurantStatus('busy')"><div class="status-option-dot" style="background:#f59e0b"></div>Très occupé</button>
+            <button class="status-option" onclick="eResto.setRestaurantStatus('closed')"><div class="status-option-dot" style="background:var(--error)"></div>Fermé</button>
+          </div>
+        </div>
+        <button class="btn btn-ghost btn-sm" onclick="eResto.logout()" style="display:flex;align-items:center;gap:6px;color:var(--error);border-color:var(--error);opacity:0.8" aria-label="Se déconnecter">
+          <span class="material-symbols-outlined" style="font-size:18px">logout</span>
+          Déconnexion
+        </button>
+      </div>
+    </header>
+
+    <main class="page-canvas">
+      <!-- Header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Gestion des Commandes</h1>
+          <p class="page-subtitle" id="orders-live-label">Mise à jour en temps réel</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm" onclick="openNewOrderModal()">
+            <span class="material-symbols-outlined" style="font-size:16px">add</span>Nouvelle commande
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI row -->
+      <section class="metric-grid stagger-children" id="orders-kpi" aria-label="Statistiques commandes"></section>
+
+      <!-- Filters + view toggle -->
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <div class="filter-pills" id="status-filters" role="group">
+          <button class="filter-pill active" data-status="all" onclick="filterByStatus('all')">Toutes</button>
+          <button class="filter-pill" data-status="received" onclick="filterByStatus('received')">Reçues</button>
+          <button class="filter-pill" data-status="in_progress" onclick="filterByStatus('in_progress')">En cours</button>
+          <button class="filter-pill" data-status="ready" onclick="filterByStatus('ready')">Prêtes</button>
+          <button class="filter-pill" data-status="delivered" onclick="filterByStatus('delivered')">Livrées</button>
+          <button class="filter-pill" data-status="cancelled" onclick="filterByStatus('cancelled')">Annulées</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label class="text-eyebrow" style="color:var(--on-surface-variant);font-size:10px">Vue :</label>
+          <button class="btn-icon active" id="view-table-btn" onclick="setOrderView('table')" title="Tableau"><span class="material-symbols-outlined" style="font-size:18px">table_rows</span></button>
+          <button class="btn-icon" id="view-kanban-btn" onclick="setOrderView('kanban')" title="Kanban"><span class="material-symbols-outlined" style="font-size:18px">view_kanban</span></button>
+        </div>
+      </div>
+
+      <!-- TABLE VIEW -->
+      <section id="orders-table-view">
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Client</th>
+                <th>Articles</th>
+                <th>Statut</th>
+                <th>Total</th>
+                <th>Réservation</th>
+                <th>Heure</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="orders-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- KANBAN VIEW -->
+      <section id="orders-kanban-view" style="display:none">
+        <div class="kanban-board" id="kanban-board"></div>
+      </section>
+
+    </main>
+
+    <footer class="page-footer">
+      <p>© 2024 eResto Management</p>
+      <div style="display:flex;gap:24px"></div>
+    </footer>
+  </div>
+
+  <!-- DETAIL MODAL -->
+  <div class="modal-overlay" id="order-detail-modal" role="dialog" aria-modal="true" aria-labelledby="order-detail-title">
+    <div class="modal" style="max-width:580px">
+      <div class="modal-header">
+        <h2 class="modal-title" id="order-detail-title">Détail commande</h2>
+        <button class="modal-close" onclick="closeOrderModal()" aria-label="Fermer"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body" id="order-detail-body"></div>
+      <div class="modal-footer" id="order-detail-footer"></div>
+    </div>
+  </div>
+
+  <!-- NEW ORDER MODAL -->
+  <div class="modal-overlay" id="new-order-modal" role="dialog" aria-modal="true">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header">
+        <h2 class="modal-title">Nouvelle commande manuelle</h2>
+        <button class="modal-close" onclick="closeNewOrderModal()" aria-label="Fermer"><span class="material-symbols-outlined">close</span></button>
+      </div>
+      <div class="modal-body">
+        <form id="new-order-form" class="dish-form" novalidate>
+          <div class="form-group">
+            <label class="form-label" for="no-customer">Nom du client *</label>
+            <div class="input-wrapper has-icon-left">
+              <span class="material-symbols-outlined input-icon-left">person</span>
+              <input class="form-input" type="text" id="no-customer" placeholder="Jean Dupont" required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label class="form-label">Articles *</label>
+            <div id="order-items-list" style="display:flex;flex-direction:column;gap:8px"></div>
+            <button type="button" class="btn btn-ghost btn-sm" style="margin-top:8px;justify-content:flex-start" onclick="addOrderItemRow()">
+              <span class="material-symbols-outlined" style="font-size:16px">add</span> Ajouter un article
+            </button>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="no-note">Note / Instructions</label>
+            <textarea class="form-input" id="no-note" rows="2" placeholder="Sans oignon, allergie noix..."></textarea>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--surface-container);border-radius:var(--radius-lg)">
+            <span class="form-label" style="margin:0">Total estimé :</span>
+            <span style="font-family:var(--font-display);font-size:20px;font-weight:800;color:var(--primary)" id="no-total">0,00 FCFA</span>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="closeNewOrderModal()">Annuler</button>
+        <button class="btn btn-primary btn-sm" onclick="submitNewOrder()">
+          <span class="material-symbols-outlined" style="font-size:16px">check</span>Créer la commande
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+  <script src="../../js/app.js"></script>
+  <script src="../../js/commandes.js"></script>
+</body>
+</html>

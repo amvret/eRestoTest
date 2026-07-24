@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Restaurants | eResto</title>
+  <meta name="description" content="Parcourez notre liste de restaurants partenaires.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/landing.css">
+  <style>
+    .restaurants-page-header {
+      padding: 60px 24px;
+      text-align: center;
+      background: linear-gradient(to bottom, #fdf5f2, #ffffff);
+      margin-bottom: 40px;
+    }
+    .restaurants-page-title {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 800;
+      color: #1c1b1b;
+      margin-bottom: 16px;
+    }
+    .restaurants-page-subtitle {
+      font-size: 18px;
+      color: #59413b;
+      max-width: 600px;
+      margin: 0 auto 32px;
+    }
+    .restaurants-search-box {
+      display: flex;
+      align-items: center;
+      background: #ffffff;
+      border-radius: 99px;
+      padding: 8px 8px 8px 24px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      max-width: 500px;
+      margin: 0 auto;
+      border: 1px solid rgba(0,0,0,0.05);
+    }
+    .restaurants-search-input {
+      flex: 1;
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 16px;
+      color: #1c1b1b;
+      font-family: inherit;
+    }
+    .restaurants-search-btn {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: var(--primary);
+      border: none;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .restaurants-search-btn:hover {
+      background: var(--primary-dark);
+    }
+  </style>
+</head>
+<body class="landing-page">
+
+  <!-- Header Navbar -->
+  <header style="background: #fdf5f2; border-bottom: 1px solid rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
+    <nav class="landing-nav">
+      <a href="../../index.html" class="landing-brand">
+        <span class="material-symbols-outlined landing-brand-icon">restaurant</span>
+        eRESTO
+      </a>
+
+      <ul class="landing-nav-links">
+        <li><a href="../../index.html" class="landing-nav-link">Accueil</a></li>
+        <li><a href="../../pages/client/restaurants.html" class="landing-nav-link active">Restaurants</a></li>
+        <li><a href="../../pages/public/a-propos.html" class="landing-nav-link">À propos</a></li>
+      </ul>
+
+      <div class="landing-nav-actions">
+        <a href="../../pages/auth/connexion.html" class="btn-landing-outline">Connexion</a>
+        <a href="../../pages/auth/inscription.html" class="btn-landing-solid">Inscription</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Container principal -->
+  <main>
+    <div class="restaurants-page-header">
+      <h1 class="restaurants-page-title">Découvrez nos restaurants partenaires</h1>
+      <p class="restaurants-page-subtitle">Parcourez la liste de tous nos restaurants, vérifiez leur disponibilité en temps réel et trouvez l'endroit idéal pour votre prochain repas.</p>
+      
+      <div class="restaurants-search-box">
+        <input type="text" class="restaurants-search-input" placeholder="Rechercher par nom ou spécialité..." id="hero-search-input">
+        <button class="restaurants-search-btn" aria-label="Rechercher">
+          <span class="material-symbols-outlined" style="font-size:22px">search</span>
+        </button>
+      </div>
+    </div>
+
+    <section class="landing-container" style="margin-bottom: 80px;">
+      <!-- Grid dynamic content -->
+      <div class="restaurants-grid" id="restaurants-grid-container" data-show-all="true">
+        <!-- Rendered dynamically by js/landing.js -->
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">eResto</div>
+        <p class="footer-tagline">Votre guide gourmand au quotidien.</p>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Informations</h4>
+        <ul class="footer-links">
+          <li><a href="../../pages/public/a-propos.html" class="footer-link">À propos</a></li>
+          <li><a href="#" class="footer-link">Mentions légales</a></li>
+          <li><a href="#" class="footer-link">Politique de confidentialité</a></li>
+          <li><a href="#" class="footer-link">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Suivez-nous</h4>
+        <ul class="footer-links">
+          <li><a href="#" class="footer-link">Facebook</a></li>
+          <li><a href="#" class="footer-link">Instagram</a></li>
+          <li><a href="#" class="footer-link">X</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../js/app.js"></script>
+  <script src="../../js/landing.js"></script>
+</body>
+</html>

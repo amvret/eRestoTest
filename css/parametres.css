@@ -1,0 +1,357 @@
+/* =====================================================
+   eResto — Paramètres Page Styles
+   ===================================================== */
+
+/* =====================================================
+   SETTINGS LAYOUT
+   ===================================================== */
+.settings-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+/* =====================================================
+   SETTINGS LEFT NAV
+   ===================================================== */
+.settings-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  position: sticky;
+  top: 80px;
+  background: var(--surface-container-lowest);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-xl);
+  padding: 10px;
+  box-shadow: var(--shadow-card);
+}
+
+.settings-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 14px;
+  border-radius: var(--radius-lg);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  border: none;
+  background: none;
+  text-align: left;
+  width: 100%;
+}
+
+.settings-nav-item .material-symbols-outlined {
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.settings-nav-item:hover {
+  background: var(--surface-container);
+  color: var(--on-surface);
+}
+
+.settings-nav-item.active {
+  background: rgba(240, 96, 61, 0.08);
+  color: var(--primary);
+  font-weight: 700;
+}
+
+.settings-nav-item.danger {
+  color: var(--error);
+  margin-top: 4px;
+}
+
+.settings-nav-item.danger:hover {
+  background: var(--error-container);
+}
+
+/* =====================================================
+   SETTINGS SECTIONS
+   ===================================================== */
+.settings-content {
+  min-width: 0;
+}
+
+.settings-section {
+  display: none;
+  flex-direction: column;
+  gap: 20px;
+  animation: fadeIn 0.3s ease;
+}
+
+.settings-section.active {
+  display: flex;
+}
+
+.settings-section-header {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.settings-section-title {
+  font-family: var(--font-display);
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--on-surface);
+  letter-spacing: -0.01em;
+}
+
+.settings-section-subtitle {
+  font-size: 13px;
+  color: var(--on-surface-variant);
+  opacity: 0.7;
+  margin-top: 3px;
+}
+
+/* =====================================================
+   SETTINGS FORM GRID
+   ===================================================== */
+.settings-form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+/* Card container within a section */
+.settings-card {
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-xl);
+  padding: 20px;
+}
+
+/* =====================================================
+   LOGO / PHOTO
+   ===================================================== */
+.settings-photo-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 20px;
+  background: var(--surface-container-low);
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-xl);
+}
+
+.settings-logo-preview {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--radius-xl);
+  background: var(--surface-container);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 2px dashed var(--outline-variant);
+  flex-shrink: 0;
+}
+
+.settings-logo-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* =====================================================
+   HOURS GRID
+   ===================================================== */
+.hours-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-xl);
+  overflow: hidden;
+}
+
+.hours-row {
+  display: grid;
+  grid-template-columns: 120px auto 1fr;
+  align-items: center;
+  gap: 16px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--outline-variant);
+  transition: background var(--transition-fast);
+}
+
+.hours-row:last-child { border-bottom: none; }
+.hours-row:hover { background: var(--surface-container-low); }
+
+.hours-day {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--on-surface);
+}
+
+.hours-inputs {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  transition: opacity 0.3s;
+}
+
+.hours-inputs.disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
+.hours-input {
+  padding: 8px 12px;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--on-surface);
+  background: var(--surface-container-lowest);
+  font-family: var(--font-body);
+  width: 90px;
+  text-align: center;
+  cursor: pointer;
+}
+
+.hours-input:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(240, 96, 61, 0.1);
+}
+
+.hours-sep {
+  font-size: 12px;
+  color: var(--on-surface-variant);
+  opacity: 0.5;
+  font-weight: 700;
+}
+
+.hours-closed-label {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--error);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  display: none;
+}
+
+/* =====================================================
+   NOTIFICATION TOGGLES
+   ===================================================== */
+.notif-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 16px 20px;
+  border: 1px solid var(--outline-variant);
+  border-radius: var(--radius-xl);
+  margin-bottom: 8px;
+  transition: background var(--transition-fast);
+}
+
+.notif-toggle-row:hover {
+  background: var(--surface-container-low);
+}
+
+.notif-toggle-info { flex: 1; }
+.notif-toggle-title { font-size: 14px; font-weight: 700; color: var(--on-surface); }
+.notif-toggle-desc  { font-size: 12px; color: var(--on-surface-variant); opacity: 0.7; margin-top: 2px; }
+
+/* =====================================================
+   PLAN CARD
+   ===================================================== */
+.plan-card {
+  background: linear-gradient(135deg, rgba(240,96,61,0.06) 0%, rgba(46,158,91,0.04) 100%);
+  border: 2px solid var(--primary);
+  border-radius: var(--radius-xl);
+  padding: 24px;
+}
+
+.plan-card.current::before {
+  content: '✓ Plan actif';
+  display: inline-flex;
+  align-items: center;
+  font-size: 11px;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--primary);
+  background: rgba(240,96,61,0.1);
+  padding: 4px 10px;
+  border-radius: var(--radius-full);
+  margin-bottom: 12px;
+}
+
+/* =====================================================
+   INVOICE LIST
+   ===================================================== */
+.invoice-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--outline-variant);
+}
+
+.invoice-row:last-child { border-bottom: none; }
+
+.invoice-date { font-size: 13px; color: var(--on-surface-variant); min-width: 100px; }
+.invoice-amount { font-weight: 700; flex: 1; }
+.invoice-status .badge { font-size: 11px; }
+
+/* =====================================================
+   BREADCRUMB
+   ===================================================== */
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.breadcrumb-item {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--on-surface-variant);
+  opacity: 0.7;
+  text-decoration: none;
+  transition: opacity var(--transition-fast);
+}
+
+.breadcrumb-item:hover { opacity: 1; color: var(--on-surface); }
+.breadcrumb-item.active { color: var(--on-surface); opacity: 1; }
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+@media (max-width: 900px) {
+  .settings-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .settings-nav {
+    position: static;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 4px;
+  }
+
+  .settings-nav-item {
+    flex: 0 0 auto;
+  }
+}
+
+@media (max-width: 640px) {
+  .settings-form-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .hours-row {
+    grid-template-columns: 100px 1fr;
+    flex-wrap: wrap;
+  }
+}

@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion du Menu | eResto Admin</title>
+  <meta name="description" content="Gérez vos plats, catégories et prix - ajoutez, modifiez ou supprimez des éléments de votre menu.">
+
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="material-symbols-outlined filled" style="font-size:26px;color:var(--primary)">restaurant</span>
+      eResto
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="../../pages/admin/dashboard.html" data-page="dashboard">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item active" href="../../pages/admin/menu.html" data-page="menu">
+        <span class="material-symbols-outlined">restaurant_menu</span>
+        <span>Menu</span>
+      </a>
+      <a class="nav-item" href="../../pages/admin/commandes.html" data-page="commandes">
+        <span class="material-symbols-outlined">receipt_long</span>
+        <span>Commandes</span>
+        
+      </a>
+      <a class="nav-item" href="../../pages/admin/reservations.html" data-page="reservations"><span class="material-symbols-outlined">event</span><span>Réservations</span></a>
+      <a class="nav-item" href="../../pages/admin/equipe.html" data-page="equipe">
+        <span class="material-symbols-outlined">group</span>
+        <span>Équipe</span>
+      </a>
+      <a class="nav-item" href="../../pages/admin/horaires.html" data-page="horaires"><span class="material-symbols-outlined">schedule</span><span>Horaires</span></a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--radius-lg);background:var(--surface-container);margin-bottom:8px">
+        <div class="topbar-user-avatar" id="sidebar-avatar" style="background:var(--primary);width:36px;height:36px;font-size:12px">?</div>
+        <div style="flex:1;min-width:0">
+          <p class="topbar-user-name" id="sidebar-user-name">Utilisateur</p>
+          <p class="topbar-user-role" id="sidebar-user-email">demo@eresto.com</p>
+        </div>
+      </div>
+      <a class="nav-item danger" href="#" onclick="eResto.logout()">
+        <span class="material-symbols-outlined">logout</span>
+        <span>Déconnexion</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:16px">
+        <button class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="Ouvrir le menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="topbar-search">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" id="menu-search" placeholder="Rechercher un plat..." aria-label="Rechercher dans le menu">
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div style="position:relative">
+          <div class="status-pill open" id="restaurant-status" role="button" tabindex="0">
+            <div class="status-dot open"></div>
+            <div>
+              <span class="text-eyebrow" style="display:block;font-size:9px;opacity:0.6">Statut</span>
+              <span class="status-text open">Ouvert</span>
+            </div>
+            <span class="material-symbols-outlined" style="font-size:16px;color:var(--brand-green)">expand_more</span>
+          </div>
+          <div class="status-dropdown" id="status-menu">
+            <button class="status-option" onclick="eResto.setRestaurantStatus('open')">
+              <div class="status-option-dot" style="background:var(--brand-green)"></div>Ouvert
+            </button>
+            <button class="status-option" onclick="eResto.setRestaurantStatus('busy')">
+              <div class="status-option-dot" style="background:#f59e0b"></div>Très occupé
+            </button>
+            <button class="status-option" onclick="eResto.setRestaurantStatus('closed')">
+              <div class="status-option-dot" style="background:var(--error)"></div>Fermé
+            </button>
+          </div>
+        </div>
+        <!-- Logout -->
+        <button class="btn btn-ghost btn-sm" onclick="eResto.logout()" style="display:flex;align-items:center;gap:6px;color:var(--error);border-color:var(--error);opacity:0.8" aria-label="Se déconnecter">
+          <span class="material-symbols-outlined" style="font-size:18px">logout</span>
+          Déconnexion
+        </button>
+
+        </div>
+    </header>
+
+    <main class="page-canvas">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Gestion du Menu</h1>
+          <p class="page-subtitle" id="menu-count-label">Organisez vos plats, prix et catégories.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm" onclick="openDishModal()">
+            <span class="material-symbols-outlined" style="font-size:16px">add</span>
+            Ajouter un plat
+          </button>
+        </div>
+      </div>
+
+      <!-- Category filters -->
+      <section class="page-section" aria-label="Filtres par catégorie">
+        <div class="filter-pills" id="category-filters" role="group" aria-label="Filtrer par catégorie">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- Menu grid -->
+      <section aria-label="Liste des plats">
+        <div class="menu-grid" id="menu-grid">
+          <!-- Rendered by JS -->
+        </div>
+      </section>
+
+      <!-- Pagination -->
+      <footer class="page-section" style="border-top:1px solid var(--outline-variant);padding-top:24px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;margin-top:32px">
+        <p class="text-label-md" style="color:var(--on-surface-variant);opacity:0.6" id="items-count-label">Affichage de tous les plats</p>
+        <div class="pagination" id="pagination">
+          <!-- Rendered by JS -->
+        </div>
+      </footer>
+
+    </main>
+
+    <footer class="page-footer">
+      <p>© 2024 eResto Management</p>
+      <div style="display:flex;gap:24px">
+        </div>
+    </footer>
+  </div>
+
+  <!-- ADD/EDIT DISH MODAL -->
+  <div class="modal-overlay" id="dish-modal" role="dialog" aria-modal="true" aria-labelledby="dish-modal-title">
+    <div class="modal" style="max-width:560px">
+      <div class="modal-header">
+        <h2 class="modal-title" id="dish-modal-title">Ajouter un plat</h2>
+        <button class="modal-close" onclick="closeDishModal()" aria-label="Fermer">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form class="dish-form" id="dish-form" novalidate>
+          <input type="hidden" id="dish-id" value="">
+
+          <div class="form-group">
+            <label class="form-label" for="dish-name">Nom du plat *</label>
+            <input class="form-input" type="text" id="dish-name" placeholder="Ex: Margherita Classique" required>
+            <span class="form-error hidden" id="dish-name-error">Le nom est requis.</span>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="form-group">
+              <label class="form-label" for="dish-category">Catégorie *</label>
+              <select class="form-input" id="dish-category" required>
+                <option value="">Choisir...</option>
+                <option value="Starters">Entrées</option>
+                <option value="Mains">Plats</option>
+                <option value="Desserts">Desserts</option>
+                <option value="Drinks">Boissons</option>
+              </select>
+              <span class="form-error hidden" id="dish-cat-error">Requis.</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="dish-code">N° de plat *</label>
+              <input class="form-input" type="text" id="dish-code" placeholder="Ex: BF-001" required>
+              <span class="form-error hidden" id="dish-code-error">Le numéro du plat est requis.</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dish-price">Prix (FCFA) *</label>
+            <div class="input-wrapper has-icon-left">
+              <span class="material-symbols-outlined input-icon-left" style="font-size:18px">paid</span>
+              <input class="form-input" type="number" id="dish-price" placeholder="0.00" step="0.01" min="0" required>
+            </div>
+            <span class="form-error hidden" id="dish-price-error">Prix invalide.</span>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dish-description">Description</label>
+            <textarea class="form-input" id="dish-description" rows="3" placeholder="Une courte description appétissante..." style="resize:vertical"></textarea>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="dish-image">Image du plat (URL ou fichier)</label>
+            <input class="form-input" type="url" id="dish-image" placeholder="https://...">
+            <input class="form-input" type="file" id="dish-image-file" accept="image/*" style="margin-top:8px">
+            <div id="dish-image-preview" style="margin-top:8px;display:none">
+              <img id="dish-image-preview-img" src="" alt="aperçu" style="max-width:120px;border-radius:8px;box-shadow:0 4px 12px rgba(0,0,0,0.08)">
+            </div>
+            <span class="form-hint">Laisser vide pour l'image par défaut. Vous pouvez uploader une image depuis votre ordinateur.</span>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface-container);border-radius:var(--radius-lg)">
+            <label class="form-label" for="dish-available" style="margin:0;flex:1;cursor:pointer">Disponible à la commande</label>
+            <button
+              type="button"
+              class="toggle-switch on"
+              id="dish-available-toggle"
+              role="switch"
+              aria-checked="true"
+              onclick="toggleAvailabilityModal(this)"
+            ></button>
+          </div>
+
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="closeDishModal()">Annuler</button>
+        <button class="btn btn-primary btn-sm" id="dish-submit-btn" onclick="saveDish()">
+          <span id="dish-submit-text">Enregistrer le plat</span>
+          <span class="spinner hidden" id="dish-spinner"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="../../js/app.js"></script>
+  <script src="../../js/menu.js"></script>
+</body>
+</html>
+
+
+
+
+
+

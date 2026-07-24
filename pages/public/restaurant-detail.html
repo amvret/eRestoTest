@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Détail du Restaurant | eResto</title>
+  <meta name="description" content="Découvrez le menu et réservez une table.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/landing.css">
+  <link rel="stylesheet" href="../../css/restaurant-detail.css">
+</head>
+<body class="landing-page">
+
+  <!-- Header Navbar -->
+  <header style="background: #fdf5f2; border-bottom: 1px solid rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
+    <nav class="landing-nav">
+      <a href="../../index.html" class="landing-brand">
+        <span class="material-symbols-outlined landing-brand-icon">restaurant</span>
+        eRESTO
+      </a>
+      <ul class="landing-nav-links">
+        <li><a href="../../index.html" class="landing-nav-link">Accueil</a></li>
+        <li><a href="../../pages/client/restaurants.html" class="landing-nav-link active">Restaurants</a></li>
+        <li><a href="../../pages/public/a-propos.html" class="landing-nav-link">À propos</a></li>
+      </ul>
+      <div class="landing-nav-actions">
+        <a href="../../pages/auth/connexion.html" class="btn-landing-outline">Connexion</a>
+        <a href="../../pages/auth/inscription.html" class="btn-landing-solid">Inscription</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- Hero Section -->
+  <div class="rd-hero">
+    <img id="rd-image" src="" alt="" class="rd-hero-img">
+    <div class="rd-hero-overlay"></div>
+    <div class="rd-hero-content">
+      <a href="../../pages/client/restaurants.html" class="rd-back-btn">
+        <span class="material-symbols-outlined">arrow_back</span>
+        Retour aux restaurants
+      </a>
+      <div id="rd-category" class="rd-category">Catégorie</div>
+      <h1 id="rd-name" class="rd-title">Nom du Restaurant</h1>
+      <div class="rd-meta">
+        <div class="rd-meta-item">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+          <span id="rd-rating" style="font-weight:700">5.0</span>
+        </div>
+        <span style="opacity:0.6">•</span>
+        <div class="rd-meta-item">
+          <span id="rd-status" class="status-badge-chip">Ouvert</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Main Layout -->
+  <main class="rd-layout">
+    <!-- Left Sidebar: Categories & Actions -->
+    <aside class="rd-sidebar">
+      <!-- Categories Card -->
+      <div class="rd-categories-card">
+        <h3 class="rd-categories-title">Catégories</h3>
+        <ul class="rd-categories-list" id="rd-categories-list">
+          <!-- Dynamically populated categories -->
+        </ul>
+      </div>
+
+      <!-- Quick Action Card -->
+      <div class="rd-sidebar-card">
+        <h3 style="font-family:var(--font-display);font-size:18px;font-weight:800;margin-bottom:12px;">Réservation & Service</h3>
+        <p style="font-size:13px;color:#6b554f;margin-bottom:20px;line-height:1.5;">Réservez votre table à l'avance pour profiter d'un service personnalisé.</p>
+        
+        <button class="rd-btn rd-btn-primary" onclick="openOrderModal()">
+          <span class="material-symbols-outlined" style="font-size:20px">takeout_dining</span>
+          Commander en ligne
+        </button>
+        <button class="rd-btn rd-btn-outline" onclick="openReserveModal()">
+          <span class="material-symbols-outlined" style="font-size:20px">event_seat</span>
+          Réserver une table
+        </button>
+      </div>
+    </aside>
+
+    <!-- Main Content Right: Dishes Section -->
+    <section class="rd-main-content">
+      <!-- Header row: Category Title + Sort filter -->
+      <div class="rd-content-header">
+        <h2 id="rd-active-category-title" class="rd-section-heading">Tous les plats</h2>
+        
+        <div class="rd-sort-wrapper">
+          <label for="rd-sort-select" style="font-size:13px;color:#78625a;font-weight:600">Trier par :</label>
+          <select id="rd-sort-select" class="rd-sort-select" onchange="handleSortChange(this.value)">
+            <option value="popularity">Popularité</option>
+            <option value="price-asc">Prix croissant</option>
+            <option value="price-desc">Prix décroissant</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Dish Cards Grid -->
+      <div class="rd-dishes-grid" id="rd-dishes-grid">
+        <!-- Dynamically rendered dish cards -->
+      </div>
+
+      <!-- Reviews Section -->
+      <div class="rd-reviews-card" style="margin-top:40px;background:#fff;border-radius:24px;padding:32px;box-shadow:0 4px 20px rgba(0,0,0,0.04);border:1px solid rgba(0,0,0,0.04);">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h2 style="font-family:var(--font-display);font-size:24px;font-weight:800;color:#1c1b1b;margin-bottom:4px;">Avis & Évaluations Clients</h2>
+            <p style="font-size:13px;color:#6b554f;margin:0;">Ce que nos clients pensent de ce restaurant</p>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;">
+            <div style="display:flex;align-items:center;gap:6px;background:#fef3c7;padding:8px 16px;border-radius:99px;color:#92400e;font-weight:800;font-size:15px;">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="#f59e0b"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+              <span id="rd-reviews-avg">4.8 / 5</span>
+            </div>
+            <button class="rd-btn rd-btn-primary" style="width:auto;padding:10px 20px;font-size:14px;" onclick="openAddReviewModal()">
+              <span class="material-symbols-outlined" style="font-size:18px">rate_review</span>
+              Écrire un avis
+            </button>
+          </div>
+        </div>
+
+        <div id="rd-reviews-list" style="display:flex;flex-direction:column;gap:16px;">
+          <!-- Dynamically populated customer reviews -->
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Floating Cart Button -->
+  <button id="floating-cart-btn" class="rd-floating-cart" onclick="openCartModal()">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <span class="material-symbols-outlined" style="font-size:24px">shopping_bag</span>
+      <span style="font-weight:800;font-size:15px;">Mon Panier</span>
+    </div>
+    <div style="display:flex;align-items:center;gap:8px;">
+      <span id="cart-badge-count" class="rd-cart-count">0</span>
+      <span id="cart-badge-total" style="font-weight:800;font-size:15px;">0 FCFA</span>
+    </div>
+  </button>
+
+  <!-- 1. CART / ORDER MODAL -->
+  <div id="cart-modal" class="rd-modal-overlay">
+    <div class="rd-modal rd-modal-lg">
+      <div class="rd-modal-header">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="rd-modal-icon-box" style="background:#fdf2ef;color:var(--primary)">
+            <span class="material-symbols-outlined">shopping_bag</span>
+          </div>
+          <div>
+            <h2 class="rd-modal-title">Votre Commande</h2>
+            <p class="rd-modal-subtitle" id="cart-modal-subtitle">0 article(s) sélectionné(s)</p>
+          </div>
+        </div>
+        <button class="rd-modal-close" onclick="closeCartModal()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="rd-modal-body">
+        <!-- Cart Items List -->
+        <div id="cart-items-container" class="rd-cart-items-list">
+          <!-- Dynamically injected cart items -->
+        </div>
+
+        <!-- Delivery Option Selector -->
+        <div class="rd-form-group" style="margin-top:20px;">
+          <label class="rd-form-label">Mode de retrait :</label>
+          <div class="rd-radio-group">
+            <label class="rd-radio-card active" id="option-delivery-label">
+              <input type="radio" name="orderType" value="delivery" checked onchange="toggleOrderType('delivery')">
+              <span class="material-symbols-outlined">moped</span>
+              <div>
+                <strong>Livraison à domicile</strong>
+                <small>+1 000 FCFA</small>
+              </div>
+            </label>
+            <label class="rd-radio-card" id="option-takeout-label">
+              <input type="radio" name="orderType" value="takeout" onchange="toggleOrderType('takeout')">
+              <span class="material-symbols-outlined">shopping_basket</span>
+              <div>
+                <strong>À emporter</strong>
+                <small>Gratuit</small>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <!-- Customer Form -->
+        <form id="order-form" onsubmit="handleOrderSubmit(event)" style="margin-top:20px;">
+          <div class="rd-form-grid">
+            <div class="rd-form-group">
+              <label class="rd-form-label" for="cust-name">Votre Nom complet *</label>
+              <input type="text" id="cust-name" class="rd-form-input" placeholder="ex: Aminata Ouedraogo" required>
+            </div>
+            <div class="rd-form-group">
+              <label class="rd-form-label" for="cust-phone">Téléphone *</label>
+              <input type="tel" id="cust-phone" class="rd-form-input" placeholder="ex: +226 70 12 34 56" required>
+            </div>
+          </div>
+
+          <div class="rd-form-group" id="delivery-address-group">
+            <label class="rd-form-label" for="cust-address">Adresse exacte de livraison *</label>
+            <input type="text" id="cust-address" class="rd-form-input" placeholder="Quartier, rue, point de repère (ex: Ouaga 2000, près de la station)" required>
+          </div>
+
+          <div class="rd-form-group">
+            <label class="rd-form-label" for="cust-note">Note / Instructions particulières</label>
+            <input type="text" id="cust-note" class="rd-form-input" placeholder="ex: Piment à part, appeler à l'arrivée...">
+          </div>
+
+          <!-- Order Summary Breakdown -->
+          <div class="rd-cart-summary">
+            <div class="rd-summary-row">
+              <span>Sous-total plats</span>
+              <span id="summary-subtotal">0 FCFA</span>
+            </div>
+            <div class="rd-summary-row" id="summary-delivery-row">
+              <span>Frais de livraison</span>
+              <span>1 000 FCFA</span>
+            </div>
+            <div class="rd-summary-row rd-summary-total">
+              <span>TOTAL À PAYER</span>
+              <span id="summary-total" style="color:var(--primary)">0 FCFA</span>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-submit-order" class="rd-btn rd-btn-primary" style="margin-top:20px;padding:16px;font-size:16px;">
+            <span class="material-symbols-outlined">check_circle</span>
+            Valider et Passer la commande
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. TABLE RESERVATION MODAL -->
+  <div id="reserve-modal" class="rd-modal-overlay">
+    <div class="rd-modal rd-modal-lg">
+      <div class="rd-modal-header">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="rd-modal-icon-box" style="background:#fdf2ef;color:var(--primary)">
+            <span class="material-symbols-outlined">event_seat</span>
+          </div>
+          <div>
+            <h2 class="rd-modal-title">Réserver une Table</h2>
+            <p class="rd-modal-subtitle">Garantissez votre place en quelques secondes</p>
+          </div>
+        </div>
+        <button class="rd-modal-close" onclick="closeReserveModal()">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="rd-modal-body">
+        <form id="reservation-form" onsubmit="handleReservationSubmit(event)">
+          <div class="rd-form-grid">
+            <div class="rd-form-group">
+              <label class="rd-form-label" for="res-name">Nom complet *</label>
+              <input type="text" id="res-name" class="rd-form-input" placeholder="ex: Abdoulaye Traoré" required>
+            </div>
+            <div class="rd-form-group">
+              <label class="rd-form-label" for="res-phone">Téléphone *</label>
+              <input type="tel" id="res-phone" class="rd-form-input" placeholder="ex: +226 75 12 34 56" required>
+            </div>
+          </div>
+
+          <div class="rd-form-grid">
+            <div class="rd-form-group rd-datepicker-wrap">
+              <label class="rd-form-label" for="res-date-trigger">Date de réservation *</label>
+              <button type="button" id="res-date-trigger" class="rd-form-input rd-date-trigger" onclick="toggleDateCalendar(event)">
+                <span id="res-date-display-text">Choisir une date</span>
+                <span class="material-symbols-outlined" style="font-size:18px;color:#9ca3af">calendar_month</span>
+              </button>
+              <input type="hidden" id="res-date" required>
+              <div id="res-date-calendar" class="rd-date-calendar">
+                <div class="rd-cal-header">
+                  <button type="button" class="rd-cal-nav" onclick="calendarChangeMonth(-1)" aria-label="Mois précédent">
+                    <span class="material-symbols-outlined" style="font-size:18px">chevron_left</span>
+                  </button>
+                  <span id="rd-cal-month-label" class="rd-cal-month-label"></span>
+                  <button type="button" class="rd-cal-nav" onclick="calendarChangeMonth(1)" aria-label="Mois suivant">
+                    <span class="material-symbols-outlined" style="font-size:18px">chevron_right</span>
+                  </button>
+                </div>
+                <div class="rd-cal-weekdays">
+                  <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+                </div>
+                <div id="rd-cal-grid" class="rd-cal-grid"></div>
+                <div class="rd-cal-legend">
+                  <span><i class="rd-cal-dot rd-cal-dot-closed"></i>Fermé</span>
+                  <span><i class="rd-cal-dot rd-cal-dot-selected"></i>Sélectionné</span>
+                </div>
+              </div>
+            </div>
+            <div class="rd-form-group">
+              <label class="rd-form-label" for="res-time">Heure souhaitée *</label>
+              <select id="res-time" class="rd-form-input" required>
+                <option value="12:00">12:00</option>
+                <option value="12:30">12:30</option>
+                <option value="13:00">13:00</option>
+                <option value="13:30">13:30</option>
+                <option value="19:00" selected>19:00</option>
+                <option value="19:30">19:30</option>
+                <option value="20:00">20:00</option>
+                <option value="20:30">20:30</option>
+                <option value="21:00">21:00</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="rd-form-group">
+            <label class="rd-form-label">Table *</label>
+            <div id="res-table-status" style="font-size:13px;margin-bottom:8px;color:var(--on-surface-variant, #6b554f)"></div>
+            <div id="res-table-picker" style="display:flex;flex-wrap:wrap;gap:8px;"></div>
+            <input type="hidden" id="res-table" value="">
+          </div>
+
+          <div class="rd-form-grid">
+            <div class="rd-form-group">
+              <label class="rd-form-label" for="res-guests">Nombre de personnes *</label>
+              <select id="res-guests" class="rd-form-input" required>
+                <option value="1">1 personne</option>
+                <option value="2" selected>2 personnes</option>
+                <option value="3">3 personnes</option>
+                <option value="4">4 personnes</option>
+                <option value="5">5 personnes</option>
+                <option value="6">6 personnes</option>
+                <option value="8">8 personnes</option>
+                <option value="10">10 personnes ou +</option>
+              </select>
+            </div>
+            <div class="rd-form-group">
+              <label class="rd-form-label" for="res-location">Emplacement préféré</label>
+              <select id="res-location" class="rd-form-input">
+                <option value="Terrasse">Terrasse extérieure</option>
+                <option value="Salle climatisée" selected>Salle climatisée</option>
+                <option value="Côté jardin">Côté jardin</option>
+                <option value="Coin VIP">Espace VIP</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="rd-form-group">
+            <label class="rd-form-label" for="res-note">Demande particulière / Occasion</label>
+            <input type="text" id="res-note" class="rd-form-input" placeholder="ex: Anniversaire, chaise enfant, table calme...">
+          </div>
+
+          <button type="submit" class="rd-btn rd-btn-primary" style="margin-top:20px;padding:16px;font-size:16px;">
+            <span class="material-symbols-outlined">event_available</span>
+            Confirmer la réservation
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. SUCCESS CONFIRMATION MODAL -->
+  <div id="success-modal" class="rd-modal-overlay">
+    <div class="rd-modal" style="text-align:center;">
+      <div style="width:64px;height:64px;background:#d1fae5;color:#059669;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+        <span class="material-symbols-outlined" style="font-size:36px">check_circle</span>
+      </div>
+      <h2 id="success-modal-title" style="font-family:var(--font-display);font-weight:800;font-size:24px;margin-bottom:8px;color:#1c1b1b">Confirmation</h2>
+      <p id="success-modal-msg" style="font-size:15px;color:#59413b;line-height:1.6;margin-bottom:24px;">Votre demande a bien été enregistrée.</p>
+      
+      <div id="success-modal-details" style="background:#f9fafb;border-radius:16px;padding:16px;margin-bottom:24px;text-align:left;font-size:14px;">
+        <!-- Filled via JS -->
+      </div>
+
+      <button class="rd-btn rd-btn-primary" style="width:100%" onclick="document.getElementById('success-modal').classList.remove('active')">
+        Super, merci !
+      </button>
+    </div>
+  </div>
+
+  <!-- 4. AUTH REQUIRED MODAL -->
+  <div id="auth-required-modal" class="rd-modal-overlay">
+    <div class="rd-modal" style="text-align:center;max-width:440px;">
+      <div style="width:64px;height:64px;background:#fef3c7;color:#92400e;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto 20px;">
+        <span class="material-symbols-outlined" style="font-size:36px">lock</span>
+      </div>
+      <h2 style="font-family:var(--font-display);font-weight:800;font-size:24px;margin-bottom:8px;color:#1c1b1b">Connexion requise</h2>
+      <p style="font-size:14px;color:#59413b;line-height:1.6;margin-bottom:20px;">
+        Vous devez vous connecter à votre compte client pour accéder au panier et valider votre commande. 
+        <br><strong style="color:var(--primary);display:inline-block;margin-top:8px;">🔒 Votre panier est automatiquement conservé !</strong>
+      </p>
+
+      <div style="display:flex;flex-direction:column;gap:12px;">
+        <button class="rd-btn rd-btn-primary" style="width:100%" onclick="redirectToLogin()">
+          <span class="material-symbols-outlined">login</span>
+          Se connecter
+        </button>
+        <button class="rd-btn rd-btn-outline" style="width:100%" onclick="redirectToRegister()">
+          <span class="material-symbols-outlined">person_add</span>
+          Créer un compte client
+        </button>
+        <button style="background:none;border:none;color:#6b7280;font-size:13px;cursor:pointer;margin-top:4px;" onclick="document.getElementById('auth-required-modal').classList.remove('active')">
+          Continuer à parcourir le menu
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. ADD REVIEW MODAL -->
+  <div id="add-review-modal" class="rd-modal-overlay">
+    <div class="rd-modal" style="max-width:500px;">
+      <div class="rd-modal-header" style="padding:0 0 16px 0;border-bottom:1px solid #f3f4f6;margin-bottom:20px;">
+        <div style="display:flex;align-items:center;gap:12px">
+          <div class="rd-modal-icon-box" style="background:#fef3c7;color:#d97706">
+            <span class="material-symbols-outlined">rate_review</span>
+          </div>
+          <div>
+            <h2 class="rd-modal-title">Donner votre avis</h2>
+            <p class="rd-modal-subtitle">Partagez votre expérience sur ce restaurant</p>
+          </div>
+        </div>
+        <button class="rd-modal-close" onclick="document.getElementById('add-review-modal').classList.remove('active')">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <form onsubmit="handleAddReviewSubmit(event)">
+        <div class="rd-form-group">
+          <label class="rd-form-label">Votre note globale *</label>
+          <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+            <div class="star-rating-picker" style="display:flex;gap:4px;font-size:32px;cursor:pointer;color:#d1d5db;">
+              <span class="star-item active" data-val="1" onclick="setReviewModalRating(1)" style="color:#f59e0b;">★</span>
+              <span class="star-item active" data-val="2" onclick="setReviewModalRating(2)" style="color:#f59e0b;">★</span>
+              <span class="star-item active" data-val="3" onclick="setReviewModalRating(3)" style="color:#f59e0b;">★</span>
+              <span class="star-item active" data-val="4" onclick="setReviewModalRating(4)" style="color:#f59e0b;">★</span>
+              <span class="star-item active" data-val="5" onclick="setReviewModalRating(5)" style="color:#f59e0b;">★</span>
+            </div>
+            <strong id="review-modal-rating-text" style="margin-left:12px;color:var(--primary);font-size:16px;">5 / 5</strong>
+          </div>
+        </div>
+
+        <div class="rd-form-group" style="margin-top:16px;">
+          <label class="rd-form-label" for="review-modal-comment">Votre commentaire *</label>
+          <textarea id="review-modal-comment" class="rd-form-input" rows="4" placeholder="Racontez votre expérience (qualité des plats, rapidité, accueil...)" required></textarea>
+        </div>
+
+        <div style="display:flex;gap:12px;margin-top:24px;">
+          <button type="button" class="rd-btn rd-btn-outline" style="flex:1" onclick="document.getElementById('add-review-modal').classList.remove('active')">Annuler</button>
+          <button type="submit" class="rd-btn rd-btn-primary" style="flex:1">
+            <span class="material-symbols-outlined">send</span>
+            Publier mon avis
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">eResto</div>
+        <p class="footer-tagline">Votre guide gourmand au quotidien.</p>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../js/app.js"></script>
+  <script src="../../js/landing.js"></script>
+  <script src="../../js/restaurant-detail.js"></script>
+</body>
+</html>

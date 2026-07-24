@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion de l'Équipe | eResto Admin</title>
+  <meta name="description" content="Gérez votre personnel de restaurant - rôles, horaires et performances de votre équipe.">
+
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="material-symbols-outlined filled" style="font-size:26px;color:var(--primary)">restaurant</span>
+      eResto
+    </div>
+
+    <nav class="sidebar-nav">
+      <a class="nav-item" href="../../pages/admin/dashboard.html" data-page="dashboard">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item" href="../../pages/admin/menu.html" data-page="menu">
+        <span class="material-symbols-outlined">restaurant_menu</span>
+        <span>Menu</span>
+      </a>
+      <a class="nav-item" href="../../pages/admin/commandes.html" data-page="commandes">
+        <span class="material-symbols-outlined">receipt_long</span>
+        <span>Commandes</span>
+        
+      </a>
+      <a class="nav-item" href="../../pages/admin/reservations.html" data-page="reservations"><span class="material-symbols-outlined">event</span><span>Réservations</span></a>
+      <a class="nav-item active" href="../../pages/admin/equipe.html" data-page="equipe">
+        <span class="material-symbols-outlined">group</span>
+        <span>Équipe</span>
+      </a>
+      <a class="nav-item" href="../../pages/admin/horaires.html" data-page="horaires"><span class="material-symbols-outlined">schedule</span><span>Horaires</span></a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--radius-lg);background:var(--surface-container);margin-bottom:8px">
+        <div class="topbar-user-avatar" id="sidebar-avatar" style="background:var(--primary);width:36px;height:36px;font-size:12px">?</div>
+        <div style="flex:1;min-width:0">
+          <p class="topbar-user-name" id="sidebar-user-name">Utilisateur</p>
+          <p class="topbar-user-role" id="sidebar-user-email">demo@eresto.com</p>
+        </div>
+      </div>
+      <a class="nav-item danger" href="#" onclick="eResto.logout()">
+        <span class="material-symbols-outlined">logout</span>
+        <span>Déconnexion</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:16px">
+        <button class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="Menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+        <div class="topbar-search">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" id="staff-search" placeholder="Rechercher un membre..." aria-label="Rechercher dans l'équipe">
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <div style="position:relative">
+          <div class="status-pill open" id="restaurant-status" role="button" tabindex="0">
+            <div class="status-dot open"></div>
+            <div>
+              <span class="text-eyebrow" style="display:block;font-size:9px;opacity:0.6">Statut</span>
+              <span class="status-text open">Ouvert</span>
+            </div>
+            <span class="material-symbols-outlined" style="font-size:16px;color:var(--brand-green)">expand_more</span>
+          </div>
+          <div class="status-dropdown" id="status-menu">
+            <button class="status-option" onclick="eResto.setRestaurantStatus('open')">
+              <div class="status-option-dot" style="background:var(--brand-green)"></div>Ouvert
+            </button>
+            <button class="status-option" onclick="eResto.setRestaurantStatus('busy')">
+              <div class="status-option-dot" style="background:#f59e0b"></div>Très occupé
+            </button>
+            <button class="status-option" onclick="eResto.setRestaurantStatus('closed')">
+              <div class="status-option-dot" style="background:var(--error)"></div>Fermé
+            </button>
+          </div>
+        </div>
+        <!-- Logout -->
+        <button class="btn btn-ghost btn-sm" onclick="eResto.logout()" style="display:flex;align-items:center;gap:6px;color:var(--error);border-color:var(--error);opacity:0.8" aria-label="Se déconnecter">
+          <span class="material-symbols-outlined" style="font-size:18px">logout</span>
+          Déconnexion
+        </button>
+      </div>
+    </header>
+
+    <main class="page-canvas">
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Gestion de l'équipe</h1>
+          <p class="page-subtitle" id="staff-count-label">Visualisez, filtrez et gérez votre personnel.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm" onclick="openStaffModal()">
+            <span class="material-symbols-outlined" style="font-size:16px">add</span>
+            Ajouter
+          </button>
+        </div>
+      </div>
+
+      <section class="metric-grid stagger-children" id="staff-metric-grid" aria-label="Statistiques équipe"></section>
+
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:12px">
+        <div class="filter-pills" id="staff-filters" role="group" aria-label="Filtrer par statut">
+          <button class="filter-pill active" data-filter="all" onclick="filterStaff('all')">Tous</button>
+          <button class="filter-pill" data-filter="on_duty" onclick="filterStaff('on_duty')">En service</button>
+          <button class="filter-pill" data-filter="off_duty" onclick="filterStaff('off_duty')">Hors service</button>
+        </div>
+        <div style="display:flex;gap:8px;align-items:center">
+          <label class="text-eyebrow" style="color:var(--on-surface-variant);font-size:10px">Vue :</label>
+          <button class="btn-icon active" id="view-cards-btn" onclick="setStaffView('cards')" title="Liste" aria-label="Vue liste">
+            <span class="material-symbols-outlined" style="font-size:18px">view_list</span>
+          </button>
+          <button class="btn-icon" id="view-table-btn" onclick="setStaffView('table')" title="Tableau" aria-label="Vue tableau">
+            <span class="material-symbols-outlined" style="font-size:18px">table_rows</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="filter-pills" id="dept-filters" role="group" aria-label="Filtrer par département" style="margin-bottom:20px"></div>
+
+      <section id="staff-cards-view" aria-label="Membres en cartes">
+        <div class="staff-grid" id="staff-grid"></div>
+      </section>
+
+      <section id="staff-table-view" style="display:none" aria-label="Membres en tableau">
+        <div class="data-table-wrapper">
+          <table class="data-table">
+            <thead>
+              <tr>
+                <th>Membre</th>
+                <th>Rôle</th>
+                <th>Département</th>
+                <th>Contrat</th>
+                <th>Contact</th>
+                <th>Statut</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="staff-table-body"></tbody>
+          </table>
+        </div>
+      </section>
+
+    </main>
+
+    <footer class="page-footer">
+      <p>© 2024 eResto Management</p>
+      <div style="display:flex;gap:24px"></div>
+    </footer>
+  </div>
+
+  <!-- ADD/EDIT STAFF MODAL -->
+  <div class="modal-overlay" id="staff-modal" role="dialog" aria-modal="true" aria-labelledby="staff-modal-title">
+    <div class="modal" style="max-width:520px">
+      <div class="modal-header">
+        <h2 class="modal-title" id="staff-modal-title">Ajouter un membre</h2>
+        <button class="modal-close" onclick="closeStaffModal()" aria-label="Fermer">
+          <span class="material-symbols-outlined">close</span>
+        </button>
+      </div>
+
+      <div class="modal-body">
+        <form id="staff-form" class="dish-form" novalidate>
+          <input type="hidden" id="staff-id" value="">
+
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+            <div class="form-group" style="grid-column:1/-1">
+              <label class="form-label" for="staff-name">Nom complet *</label>
+              <div class="input-wrapper has-icon-left">
+                <span class="material-symbols-outlined input-icon-left">badge</span>
+                <input class="form-input" type="text" id="staff-name" placeholder="Elena Rodriguez" required>
+              </div>
+              <span class="form-error hidden" id="staff-name-error">Le nom est requis.</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="staff-role">Rôle *</label>
+              <select class="form-input" id="staff-role" required>
+                <option value="">Choisir...</option>
+                <option value="Executive Chef">Chef Exécutif</option>
+                <option value="Sous Chef">Sous Chef</option>
+                <option value="Line Cook">Cuisinier</option>
+                <option value="Floor Manager">Manager de Salle</option>
+                <option value="Senior Waiter">Serveur Senior</option>
+                <option value="Wait Staff">Serveur</option>
+                <option value="Bartender">Barman</option>
+                <option value="Cashier">Caissier</option>
+              </select>
+              <span class="form-error hidden" id="staff-role-error">Requis.</span>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="staff-dept">Département</label>
+              <select class="form-input" id="staff-dept">
+                <option value="Kitchen">Cuisine</option>
+                <option value="Floor">Salle</option>
+                <option value="Bar">Bar</option>
+                <option value="Management">Direction</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="staff-email">Email</label>
+              <div class="input-wrapper has-icon-left">
+                <span class="material-symbols-outlined input-icon-left">mail</span>
+                <input class="form-input" type="email" id="staff-email" placeholder="nom@eresto.com">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="staff-phone">Téléphone</label>
+              <div class="input-wrapper has-icon-left">
+                <span class="material-symbols-outlined input-icon-left">phone</span>
+                <input class="form-input" type="tel" id="staff-phone" placeholder="+226 70 12 34 56">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="staff-schedule">Type de contrat</label>
+              <select class="form-input" id="staff-schedule">
+                <option value="Full-Time">Temps plein</option>
+                <option value="Part-Time">Temps partiel</option>
+                <option value="Contract">CDD</option>
+                <option value="Seasonal">Saisonnier</option>
+              </select>
+            </div>
+          </div>
+
+          <div style="display:flex;align-items:center;gap:12px;padding:12px 16px;background:var(--surface-container);border-radius:var(--radius-lg)">
+            <label class="form-label" style="margin:0;flex:1;cursor:pointer">En service actuellement</label>
+            <button
+              type="button"
+              class="toggle-switch on"
+              id="staff-duty-toggle"
+              role="switch"
+              aria-checked="true"
+              onclick="this.classList.toggle('on');this.setAttribute('aria-checked',this.classList.contains('on'))"
+            ></button>
+          </div>
+        </form>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn btn-secondary btn-sm" onclick="closeStaffModal()">Annuler</button>
+        <button class="btn btn-primary btn-sm" onclick="saveStaff()">
+          <span id="staff-submit-text">Enregistrer</span>
+          <span class="spinner hidden" id="staff-spinner"></span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="../../js/app.js"></script>
+  <script src="../../js/equipe.js"></script>
+</body>
+</html>
+
+
+
+
+
+

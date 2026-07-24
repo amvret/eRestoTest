@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard | eResto Admin</title>
+  <meta name="description" content="Tableau de bord de votre restaurant - commandes, revenus, et performances en temps réel.">
+
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/admin.css">
+</head>
+<body class="admin-body">
+
+  <!-- Mobile overlay -->
+  <div class="sidebar-overlay" id="sidebar-overlay"></div>
+
+  <!-- Sidebar -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="material-symbols-outlined filled" style="font-size:26px;color:var(--primary)">restaurant</span>
+      eResto
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navigation principale">
+      <a class="nav-item active" href="../../pages/admin/dashboard.html" data-page="dashboard">
+        <span class="material-symbols-outlined">dashboard</span>
+        <span>Dashboard</span>
+      </a>
+      <a class="nav-item" href="../../pages/admin/menu.html" data-page="menu">
+        <span class="material-symbols-outlined">restaurant_menu</span>
+        <span>Menu</span>
+      </a>
+      <a class="nav-item" href="../../pages/admin/commandes.html" data-page="commandes">
+        <span class="material-symbols-outlined">receipt_long</span>
+        <span>Commandes</span>
+      </a>
+      <a class="nav-item" href="../../pages/admin/reservations.html" data-page="reservations"><span class="material-symbols-outlined">event</span><span>Réservations</span></a>
+      <a class="nav-item" href="../../pages/admin/equipe.html" data-page="equipe">
+        <span class="material-symbols-outlined">group</span>
+        <span>Équipe</span>
+      </a>
+      <a class="nav-item" href="../../pages/admin/horaires.html" data-page="horaires"><span class="material-symbols-outlined">schedule</span><span>Horaires</span></a>
+    </nav>
+
+    <!-- Sidebar user info -->
+    <div class="sidebar-footer">
+      <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:var(--radius-lg);background:var(--surface-container);margin-bottom:8px">
+        <div class="topbar-user-avatar" id="sidebar-avatar" style="background:var(--primary);width:36px;height:36px;font-size:12px">?</div>
+        <div style="flex:1;min-width:0">
+          <p class="topbar-user-name" id="sidebar-user-name" style="font-size:13px">Utilisateur</p>
+          <p class="topbar-user-role" id="sidebar-user-email" style="font-size:11px">demo@eresto.com</p>
+        </div>
+      </div>
+      <a class="nav-item danger" href="#" onclick="eResto.logout()">
+        <span class="material-symbols-outlined">logout</span>
+        <span>Déconnexion</span>
+      </a>
+    </div>
+  </aside>
+
+  <!-- Main content -->
+  <div class="main-content">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <div style="display:flex;align-items:center;gap:16px">
+        <!-- Mobile menu -->
+        <button class="mobile-menu-btn" id="mobile-menu-toggle" aria-label="Ouvrir le menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
+
+        <!-- Search -->
+        <div class="topbar-search" role="search">
+          <span class="material-symbols-outlined">search</span>
+          <input type="text" id="global-search" placeholder="Rechercher commandes, plats..." aria-label="Recherche globale">
+        </div>
+      </div>
+
+      <div class="topbar-right">
+        <!-- Restaurant status -->
+        <div style="position:relative">
+          <div class="status-pill open" id="restaurant-status" role="button" aria-label="Statut du restaurant" tabindex="0">
+            <div class="status-dot open"></div>
+            <div>
+              <span class="text-eyebrow" style="display:block;font-size:9px;opacity:0.6">Statut</span>
+              <span class="status-text open">Ouvert</span>
+            </div>
+            <span class="material-symbols-outlined" style="font-size:16px;color:var(--brand-green)">expand_more</span>
+          </div>
+
+          <!-- Status dropdown -->
+          <div class="status-dropdown" id="status-menu">
+            <button class="status-option" onclick="eResto.setRestaurantStatus('open')">
+              <div class="status-option-dot" style="background:var(--brand-green)"></div>
+              Ouvert
+            </button>
+            <button class="status-option" onclick="eResto.setRestaurantStatus('busy')">
+              <div class="status-option-dot" style="background:#f59e0b"></div>
+              Très occupé
+            </button>
+            <button class="status-option" onclick="eResto.setRestaurantStatus('closed')">
+              <div class="status-option-dot" style="background:var(--error)"></div>
+              Fermé
+            </button>
+          </div>
+        </div>
+
+        <!-- Logout -->
+        <button class="btn btn-ghost btn-sm" onclick="eResto.logout()" style="display:flex;align-items:center;gap:6px;color:var(--error);border-color:var(--error);opacity:0.8" aria-label="Se déconnecter">
+          <span class="material-symbols-outlined" style="font-size:18px">logout</span>
+          Déconnexion
+        </button>
+      </div>
+    </header>
+
+    <!-- Page canvas -->
+    <main class="page-canvas" id="main-page">
+
+      <!-- Page header -->
+      <div class="page-header">
+        <div>
+          <h1 class="page-title">Dashboard Overview</h1>
+          <p class="page-subtitle" id="dashboard-subtitle">Résumé des performances de votre restaurant pour aujourd'hui.</p>
+        </div>
+        <div class="page-actions">
+          <button class="btn btn-primary btn-sm" onclick="openNewOrderModal()">
+            <span class="material-symbols-outlined" style="font-size:16px">add</span>
+            Nouvelle commande
+          </button>
+        </div>
+      </div>
+
+      <!-- Metric cards -->
+      <section class="metric-grid stagger-children" id="metric-grid" aria-label="Indicateurs clés">
+        <!-- Cards rendered by JS -->
+      </section>
+
+      <!-- Main grid: Orders + Quick actions -->
+      <div class="dashboard-grid">
+
+        <!-- Active Orders -->
+        <section class="orders-section" aria-label="Commandes actives">
+          <div class="section-header">
+            <h2 class="section-title">Commandes actives</h2>
+            <button class="btn btn-ghost btn-sm" onclick="viewAllOrders()">Voir tout</button>
+          </div>
+
+          <!-- Filter tabs -->
+          <div class="filter-pills" id="order-filter-pills" role="tablist" style="margin-bottom:12px">
+            <button class="filter-pill active" data-filter="all" onclick="filterOrders('all')" role="tab">Toutes</button>
+            <button class="filter-pill" data-filter="received" onclick="filterOrders('received')" role="tab">Reçues</button>
+            <button class="filter-pill" data-filter="in_progress" onclick="filterOrders('in_progress')" role="tab">En cours</button>
+            <button class="filter-pill" data-filter="ready" onclick="filterOrders('ready')" role="tab">Prêtes</button>
+          </div>
+
+          <div class="data-table-wrapper">
+            <table class="data-table" id="orders-table">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Client</th>
+                  <th>Articles</th>
+                  <th>Statut</th>
+                  <th>Total</th>
+                  <th>Heure</th>
+                  <th></th>
+                </tr>
+              </thead>
+              <tbody id="orders-tbody">
+                <!-- Rendered by JS -->
+              </tbody>
+            </table>
+          </div>
+        </section>
+
+        <!-- Quick actions sidebar -->
+        <aside class="quick-actions" aria-label="Actions rapides">
+
+          <!-- Quick actions -->
+          <div>
+            <h3 class="text-eyebrow" style="color:var(--on-surface-variant);margin-bottom:14px">Actions rapides</h3>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <button class="quick-action-btn primary" onclick="window.location.href='menu.html'">
+                <span>Ajouter un plat</span>
+                <span class="material-symbols-outlined" style="font-size:18px">add</span>
+              </button>
+              <button class="quick-action-btn secondary" onclick="window.location.href='equipe.html'">
+                <span>Gérer l'équipe</span>
+                <span class="material-symbols-outlined" style="font-size:18px;color:var(--on-surface-variant)">chevron_right</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Services & Authorizations Card -->
+          <div style="background:#fff;border-radius:var(--radius-xl);padding:20px;box-shadow:0 4px 20px rgba(0,0,0,0.03);border:1px solid rgba(0,0,0,0.04);margin-top:16px;">
+            <h3 class="text-eyebrow" style="color:var(--on-surface-variant);margin-bottom:12px">Services aux Clients</h3>
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <label style="display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:700;cursor:pointer">
+                <span>🛵 Commandes en ligne</span>
+                <input type="checkbox" id="toggle-service-orders" onchange="handleServiceToggle('allowOrders', this.checked)" checked style="width:18px;height:18px;accent-color:var(--primary)">
+              </label>
+              <label style="display:flex;align-items:center;justify-content:space-between;font-size:14px;font-weight:700;cursor:pointer">
+                <span>📅 Réservations de table</span>
+                <input type="checkbox" id="toggle-service-reservations" onchange="handleServiceToggle('allowReservations', this.checked)" checked style="width:18px;height:18px;accent-color:var(--primary)">
+              </label>
+            </div>
+          </div>
+
+          <!-- Top sellers -->
+          <div>
+            <h3 class="text-eyebrow" style="color:var(--on-surface-variant);margin-bottom:14px">Top Ventes</h3>
+            <div class="data-table-wrapper" style="border-radius:var(--radius-xl)">
+              <div id="top-sellers-list">
+                <!-- Rendered by JS -->
+              </div>
+            </div>
+          </div>
+
+        </aside>
+      </div>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="page-footer">
+      <p>© 2024 eResto Management</p>
+      <div style="display:flex;gap:24px">
+        </div>
+    </footer>
+  </div>
+
+  <!-- Order context menu (positioned by JS) -->
+  <div class="order-actions-menu" id="order-context-menu">
+    <button class="order-action-item" onclick="updateOrderStatus('in_progress')">
+      <span class="material-symbols-outlined" style="font-size:16px">hourglass_top</span>
+      En cours
+    </button>
+    <button class="order-action-item" onclick="updateOrderStatus('ready')">
+      <span class="material-symbols-outlined" style="font-size:16px">check_circle</span>
+      Prête
+    </button>
+    <button class="order-action-item" onclick="updateOrderStatus('delivered')">
+      <span class="material-symbols-outlined" style="font-size:16px">delivery_dining</span>
+      Livrée
+    </button>
+    <hr style="border:none;border-top:1px solid var(--outline-variant);margin:4px 0">
+    <button class="order-action-item danger" onclick="cancelOrder()">
+      <span class="material-symbols-outlined" style="font-size:16px">cancel</span>
+      Annuler
+    </button>
+  </div>
+
+  <div id="toast-container"></div>
+
+  <script src="../../js/app.js"></script>
+  <script src="../../js/dashboard.js"></script>
+</body>
+</html>
+
+
+
+

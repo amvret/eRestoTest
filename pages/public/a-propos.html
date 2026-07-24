@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>À propos | eResto</title>
+  <meta name="description" content="Découvrez comment fonctionne eResto : réservation de table, commande en ligne, et gestion de restaurant. Toutes les réponses à vos questions.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0">
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/landing.css">
+  <link rel="stylesheet" href="../../css/a-propos.css">
+</head>
+<body class="landing-page">
+
+  <!-- Header Navbar -->
+  <header style="background: #fdf5f2; border-bottom: 1px solid rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
+    <nav class="landing-nav">
+      <a href="../../index.html" class="landing-brand">
+        <span class="material-symbols-outlined landing-brand-icon">restaurant</span>
+        eRESTO
+      </a>
+
+      <ul class="landing-nav-links">
+        <li><a href="../../index.html" class="landing-nav-link">Accueil</a></li>
+        <li><a href="../../pages/client/restaurants.html" class="landing-nav-link">Restaurants</a></li>
+        <li><a href="../../pages/public/a-propos.html" class="landing-nav-link active">À propos</a></li>
+      </ul>
+
+      <div class="landing-nav-actions">
+        <a href="../../pages/auth/connexion.html" class="btn-landing-outline">Connexion</a>
+        <a href="../../pages/auth/inscription.html" class="btn-landing-solid">Inscription</a>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
+    <section class="ap-hero">
+      <h1 class="ap-hero-title">Comment fonctionne eResto ?</h1>
+      <p class="ap-hero-subtitle">
+        eResto connecte les gourmands et les restaurants : réservez une table ou commandez vos plats en
+        quelques clics, pendant que les restaurateurs gèrent tout depuis un tableau de bord simple et complet.
+      </p>
+    </section>
+
+    <!-- Guide d'utilisation -->
+    <section class="ap-section" id="guide">
+      <h2 class="ap-section-title">Guide d'utilisation</h2>
+      <p class="ap-section-subtitle">eResto s'utilise différemment selon que vous êtes client ou propriétaire d'un restaurant. Choisissez votre profil :</p>
+
+      <div class="ap-tabs">
+        <button type="button" class="ap-tab-btn active" data-tab="client">Je suis client</button>
+        <button type="button" class="ap-tab-btn" data-tab="resto">Je gère un restaurant</button>
+      </div>
+
+      <!-- Client steps -->
+      <div class="ap-tab-panel active" data-tab-panel="client">
+        <div class="ap-steps">
+          <div class="ap-step-card">
+            <div class="ap-step-number">1</div>
+            <h3 class="ap-step-title">Créez votre compte</h3>
+            <p class="ap-step-desc">Inscrivez-vous en quelques secondes pour pouvoir réserver ou commander.</p>
+          </div>
+          <div class="ap-step-card">
+            <div class="ap-step-number">2</div>
+            <h3 class="ap-step-title">Choisissez un restaurant</h3>
+            <p class="ap-step-desc">Parcourez la liste des restaurants partenaires, leurs menus, avis et disponibilités.</p>
+          </div>
+          <div class="ap-step-card">
+            <div class="ap-step-number">3</div>
+            <h3 class="ap-step-title">Réservez ou commandez</h3>
+            <p class="ap-step-desc">Réservez une table pour une date et une heure disponibles, ou ajoutez des plats au panier et validez votre commande.</p>
+          </div>
+          <div class="ap-step-card">
+            <div class="ap-step-number">4</div>
+            <h3 class="ap-step-title">Suivez votre statut</h3>
+            <p class="ap-step-desc">Retrouvez toutes vos réservations et commandes, avec leur statut en temps réel, depuis votre tableau de bord.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Restaurateur steps -->
+      <div class="ap-tab-panel" data-tab-panel="resto">
+        <div class="ap-steps">
+          <div class="ap-step-card">
+            <div class="ap-step-number">1</div>
+            <h3 class="ap-step-title">Inscrivez votre restaurant</h3>
+            <p class="ap-step-desc">Créez votre compte restaurateur et complétez le profil de votre établissement.</p>
+          </div>
+          <div class="ap-step-card">
+            <div class="ap-step-number">2</div>
+            <h3 class="ap-step-title">Configurez vos horaires</h3>
+            <p class="ap-step-desc">Définissez vos jours et heures d'ouverture : ce sont eux qui déterminent les dates et créneaux proposés aux clients.</p>
+          </div>
+          <div class="ap-step-card">
+            <div class="ap-step-number">3</div>
+            <h3 class="ap-step-title">Ajoutez votre menu</h3>
+            <p class="ap-step-desc">Créez vos plats, catégories, prix et disponibilité depuis la page Menu.</p>
+          </div>
+          <div class="ap-step-card">
+            <div class="ap-step-number">4</div>
+            <h3 class="ap-step-title">Gérez commandes & réservations</h3>
+            <p class="ap-step-desc">Suivez et faites avancer chaque commande, gérez vos tables et votre équipe depuis le tableau de bord.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Fonctionnalités -->
+    <section class="ap-section" id="fonctionnalites">
+      <h2 class="ap-section-title">Fonctionnalités</h2>
+      <p class="ap-section-subtitle">Tout ce qu'il faut pour réserver, commander et gérer un restaurant, au même endroit.</p>
+
+      <div class="ap-features-grid">
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:#edf2ff; color:#3b82f6">
+            <span class="material-symbols-outlined">calendar_today</span>
+          </div>
+          <h3 class="feature-title">Réservation de table</h3>
+          <p class="feature-desc">Choisissez une date et une heure réellement disponibles, selon les horaires du restaurant, et sélectionnez votre table.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:#fef2f2; color:#ef4444">
+            <span class="material-symbols-outlined">rocket_launch</span>
+          </div>
+          <h3 class="feature-title">Commande en ligne</h3>
+          <p class="feature-desc">Composez votre panier, choisissez livraison ou retrait, et suivez votre commande jusqu'à la livraison.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:#f0fdf4; color:#22c55e">
+            <span class="material-symbols-outlined">verified</span>
+          </div>
+          <h3 class="feature-title">Restaurants vérifiés</h3>
+          <p class="feature-desc">Des établissements sélectionnés, avec avis clients et notes pour vous aider à choisir.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:#fdf4ff; color:#a855f7">
+            <span class="material-symbols-outlined">dashboard</span>
+          </div>
+          <h3 class="feature-title">Tableau de bord restaurateur</h3>
+          <p class="feature-desc">Statistiques, commandes en direct, meilleures ventes : tout pour piloter votre activité.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:#fff7ed; color:#f97316">
+            <span class="material-symbols-outlined">schedule</span>
+          </div>
+          <h3 class="feature-title">Horaires personnalisés</h3>
+          <p class="feature-desc">Définissez vos jours de fermeture et vos heures d'ouverture : elles s'appliquent automatiquement aux réservations.</p>
+        </div>
+
+        <div class="feature-card">
+          <div class="feature-icon-box" style="background:#eff6ff; color:#0ea5e9">
+            <span class="material-symbols-outlined">groups</span>
+          </div>
+          <h3 class="feature-title">Gestion d'équipe</h3>
+          <p class="feature-desc">Ajoutez les membres de votre équipe et gérez les accès à votre espace restaurateur.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="ap-section" id="faq">
+      <h2 class="ap-section-title">Questions fréquentes</h2>
+      <p class="ap-section-subtitle">Vous ne trouvez pas votre réponse ? Contactez-nous depuis la page Support.</p>
+
+      <div class="ap-faq-list">
+        <div class="ap-faq-item open">
+          <button type="button" class="ap-faq-question">
+            Comment réserver une table ?
+            <span class="material-symbols-outlined ap-faq-icon">add</span>
+          </button>
+          <div class="ap-faq-answer">
+            <div class="ap-faq-answer-inner">
+              Ouvrez la fiche du restaurant, cliquez sur « Réserver une table », puis choisissez une date dans le calendrier — seuls les jours où le restaurant est ouvert sont sélectionnables. Les créneaux horaires proposés s'ajustent automatiquement selon les horaires du restaurant pour cette date, ainsi que la table disponible.
+            </div>
+          </div>
+        </div>
+
+        <div class="ap-faq-item">
+          <button type="button" class="ap-faq-question">
+            Pourquoi certaines dates ou heures ne sont pas sélectionnables ?
+            <span class="material-symbols-outlined ap-faq-icon">add</span>
+          </button>
+          <div class="ap-faq-answer">
+            <div class="ap-faq-answer-inner">
+              Chaque restaurant définit ses propres jours et heures d'ouverture. Les jours de fermeture apparaissent grisés dans le calendrier, et seules les heures comprises dans la plage d'ouverture du jour choisi sont proposées.
+            </div>
+          </div>
+        </div>
+
+        <div class="ap-faq-item">
+          <button type="button" class="ap-faq-question">
+            Comment suivre ma commande ou ma réservation ?
+            <span class="material-symbols-outlined ap-faq-icon">add</span>
+          </button>
+          <div class="ap-faq-answer">
+            <div class="ap-faq-answer-inner">
+              Rendez-vous dans votre espace client : vous y retrouvez l'historique de vos commandes et réservations, avec leur statut mis à jour en temps réel par le restaurant.
+            </div>
+          </div>
+        </div>
+
+        <div class="ap-faq-item">
+          <button type="button" class="ap-faq-question">
+            Puis-je annuler une réservation ou une commande ?
+            <span class="material-symbols-outlined ap-faq-icon">add</span>
+          </button>
+          <div class="ap-faq-answer">
+            <div class="ap-faq-answer-inner">
+              Oui, depuis votre tableau de bord client. Selon l'avancement de la commande, l'annulation peut ne plus être possible si le restaurant a déjà commencé la préparation.
+            </div>
+          </div>
+        </div>
+
+        <div class="ap-faq-item">
+          <button type="button" class="ap-faq-question">
+            Comment inscrire mon restaurant sur eResto ?
+            <span class="material-symbols-outlined ap-faq-icon">add</span>
+          </button>
+          <div class="ap-faq-answer">
+            <div class="ap-faq-answer-inner">
+              Créez un compte restaurateur depuis la page Inscription, puis complétez votre profil : informations générales, horaires, menu et tables. Votre restaurant apparaît ensuite dans la liste dès qu'il est configuré.
+            </div>
+          </div>
+        </div>
+
+        <div class="ap-faq-item">
+          <button type="button" class="ap-faq-question">
+            Une commande apparaît côté restaurant sans que je l'aie envoyée, est-ce normal ?
+            <span class="material-symbols-outlined ap-faq-icon">add</span>
+          </button>
+          <div class="ap-faq-answer">
+            <div class="ap-faq-answer-inner">
+              Non : ajouter des plats à votre panier ne crée jamais de commande. Une commande n'est enregistrée et visible côté restaurant qu'une fois que vous cliquez sur « Valider et passer la commande ».
+            </div>
+          </div>
+        </div>
+
+        <div class="ap-faq-item">
+          <button type="button" class="ap-faq-question">
+            Le service est-il gratuit ?
+            <span class="material-symbols-outlined ap-faq-icon">add</span>
+          </button>
+          <div class="ap-faq-answer">
+            <div class="ap-faq-answer-inner">
+              La création de compte et la navigation sur eResto sont gratuites pour les clients. Seuls les frais de livraison éventuels, propres à chaque restaurant, s'ajoutent au montant de la commande.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="ap-section">
+      <div class="ap-cta-band">
+        <h2 class="ap-cta-title">Prêt à commencer ?</h2>
+        <p class="ap-cta-subtitle">Rejoignez eResto en tant que client gourmand ou restaurateur, et profitez d'une expérience simple et rapide.</p>
+        <div class="ap-cta-actions">
+          <a href="../../pages/client/restaurants.html" class="ap-cta-btn ap-cta-btn-solid">Découvrir les restaurants</a>
+          <a href="../../pages/auth/inscription.html" class="ap-cta-btn ap-cta-btn-outline">Créer un compte</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="landing-footer">
+    <div class="footer-inner">
+      <div>
+        <div class="footer-brand">eResto</div>
+        <p class="footer-tagline">Votre guide gourmand au quotidien.</p>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Informations</h4>
+        <ul class="footer-links">
+          <li><a href="../../pages/public/a-propos.html" class="footer-link">À propos</a></li>
+          <li><a href="#faq" class="footer-link">FAQ</a></li>
+          <li><a href="#" class="footer-link">Contact</a></li>
+        </ul>
+      </div>
+
+      <div>
+        <h4 class="footer-col-title">Suivez-nous</h4>
+        <ul class="footer-links">
+          <li><a href="#" class="footer-link">Facebook</a></li>
+          <li><a href="#" class="footer-link">Instagram</a></li>
+          <li><a href="#" class="footer-link">X</a></li>
+        </ul>
+      </div>
+    </div>
+  </footer>
+
+  <script src="../../js/app.js"></script>
+  <script src="../../js/a-propos.js"></script>
+</body>
+</html>

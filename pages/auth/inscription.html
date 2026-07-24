@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="fr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Inscription | eResto</title>
+  <meta name="description" content="Créez votre compte eResto en tant que client ou propriétaire de restaurant.">
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="../../css/landing.css">
+  <link rel="stylesheet" href="../../css/auth.css">
+</head>
+<body class="auth-body">
+
+  <!-- Header Navbar -->
+  <header style="background: #fdf5f2; border-bottom: 1px solid rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
+    <nav class="landing-nav">
+      <a href="../../index.html" class="landing-brand">
+        <span class="material-symbols-outlined landing-brand-icon">restaurant</span>
+        eRESTO
+      </a>
+
+      <ul class="landing-nav-links">
+        <li><a href="../../index.html" class="landing-nav-link active">Accueil</a></li>
+        <li><a href="../../pages/client/restaurants.html" class="landing-nav-link">Restaurants</a></li>
+        <li><a href="../../pages/public/a-propos.html" class="landing-nav-link">À propos</a></li>
+      </ul>
+
+      <div class="landing-nav-actions">
+        <a href="../../pages/auth/connexion.html" class="btn-landing-outline">Connexion</a>
+        <a href="../../pages/auth/inscription.html" class="btn-landing-solid">Inscription</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="auth-bg-pattern" aria-hidden="true"></div>
+
+  <div class="auth-container">
+
+    <!-- Left panel -->
+    <section class="auth-panel" aria-label="Rejoignez eResto">
+      <div class="auth-panel-inner">
+        <div class="auth-logo">
+          <span class="material-symbols-outlined filled" style="font-size:32px">restaurant</span>
+          <span>eResto</span>
+        </div>
+        <div class="auth-panel-content">
+          <h1 class="auth-headline">Rejoignez l'aventure culinaire.</h1>
+          <p class="auth-subline">Commandez dans les meilleurs restaurants ou gérez votre propre établissement.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Right: form -->
+    <section class="auth-form-section">
+      <div class="auth-form-wrapper">
+
+        <header class="auth-form-header">
+          <h2 class="auth-form-title">Créer un compte</h2>
+          <p class="auth-form-subtitle">Rejoignez eResto en quelques secondes.</p>
+        </header>
+
+        <div class="form-alert hidden" id="register-alert" role="alert"></div>
+
+        <!-- Account type switcher -->
+        <div class="account-switcher" role="group" aria-label="Type de compte">
+          <button class="switcher-btn active" id="btn-client" type="button"
+            onclick="switchAccountType('client')" aria-pressed="true">
+            <span class="material-symbols-outlined" style="font-size:18px">person</span>
+            Compte Client
+          </button>
+          <button class="switcher-btn" id="btn-owner" type="button"
+            onclick="switchAccountType('owner')" aria-pressed="false">
+            <span class="material-symbols-outlined" style="font-size:18px">storefront</span>
+            Propriétaire
+          </button>
+        </div>
+
+        <form id="register-form" class="auth-form" novalidate>
+
+          <!-- Nom -->
+          <div class="form-group">
+            <label class="form-label" for="full-name">Nom Complet</label>
+            <div class="input-wrapper has-icon-left">
+              <span class="material-symbols-outlined input-icon-left">badge</span>
+              <input class="form-input" type="text" id="full-name" name="fullName"
+                autocomplete="name" placeholder="Jean Dupont" required>
+            </div>
+            <span class="form-error hidden" id="name-error"></span>
+          </div>
+
+          <!-- Email -->
+          <div class="form-group">
+            <label class="form-label" for="reg-email">Email</label>
+            <div class="input-wrapper has-icon-left">
+              <span class="material-symbols-outlined input-icon-left">mail</span>
+              <input class="form-input" type="email" id="reg-email" name="email"
+                autocomplete="email" placeholder="jean@example.com" required>
+            </div>
+            <span class="form-error hidden" id="reg-email-error"></span>
+          </div>
+
+          <!-- Mot de passe -->
+          <div class="form-group">
+            <label class="form-label" for="reg-password">Mot de passe</label>
+            <div class="input-wrapper has-icon-left has-icon-right">
+              <span class="material-symbols-outlined input-icon-left">lock</span>
+              <input class="form-input" type="password" id="reg-password" name="password"
+                autocomplete="new-password" placeholder="••••••••" required
+                oninput="updatePasswordStrength(this.value)">
+              <button type="button" class="input-icon-right"
+                onclick="togglePasswordVisibility('reg-password', this)"
+                aria-label="Afficher/masquer le mot de passe">
+                <span class="material-symbols-outlined" style="font-size:20px">visibility</span>
+              </button>
+            </div>
+            <div class="strength-meter" id="strength-meter" style="display:none">
+              <div class="strength-bars" id="strength-bars">
+                <div class="strength-bar" data-index="1"></div>
+                <div class="strength-bar" data-index="2"></div>
+                <div class="strength-bar" data-index="3"></div>
+                <div class="strength-bar" data-index="4"></div>
+                <div class="strength-bar" data-index="5"></div>
+              </div>
+              <span class="strength-label" id="strength-label"></span>
+            </div>
+            <span class="form-error hidden" id="password-reg-error"></span>
+          </div>
+
+          <!-- Champs propriétaire (masqués par défaut) -->
+          <div class="owner-fields" id="owner-fields" aria-hidden="true">
+            <div class="owner-fields-inner">
+              <p class="text-eyebrow" style="color:var(--primary);margin-bottom:-4px">Informations Restaurant</p>
+
+              <div class="form-group">
+                <label class="form-label" for="restaurant-name">Nom du Restaurant *</label>
+                <div class="input-wrapper has-icon-left">
+                  <span class="material-symbols-outlined input-icon-left">restaurant</span>
+                  <input class="form-input" type="text" id="restaurant-name"
+                    name="restaurantName" placeholder="L'Atelier des Saveurs">
+                </div>
+                <span class="form-error hidden" id="rest-name-error"></span>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="cuisine-type">Type de Cuisine</label>
+                <div class="input-wrapper has-icon-left" style="position:relative">
+                  <span class="material-symbols-outlined input-icon-left">local_dining</span>
+                  <select class="form-input" id="cuisine-type" name="cuisineType"
+                    style="padding-left:46px;cursor:pointer">
+                    <option value="">Sélectionner un type</option>
+                    <option value="française">Française</option>
+                    <option value="italienne">Italienne</option>
+                    <option value="japonaise">Japonaise</option>
+                    <option value="mexicaine">Mexicaine</option>
+                    <option value="libanaise">Libanaise</option>
+                    <option value="indienne">Indienne</option>
+                    <option value="street-food">Street Food</option>
+                    <option value="méditerranéenne">Méditerranéenne</option>
+                    <option value="végétarienne">Végétarienne</option>
+                    <option value="fusion">Fusion</option>
+                  </select>
+                  <span class="material-symbols-outlined" style="position:absolute;right:14px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--on-surface-variant);font-size:20px">expand_more</span>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="restaurant-address">Adresse</label>
+                <div class="input-wrapper has-icon-left">
+                  <span class="material-symbols-outlined input-icon-left">location_on</span>
+                  <input class="form-input" type="text" id="restaurant-address"
+                    name="address" placeholder="12 rue de la Gastronomie, Paris">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label" for="restaurant-phone">Téléphone du restaurant</label>
+                <div class="input-wrapper has-icon-left">
+                  <span class="material-symbols-outlined input-icon-left">phone</span>
+                  <input class="form-input" type="tel" id="restaurant-phone"
+                    name="phone" placeholder="+226 70 12 34 56">
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label class="form-label">Photo de couverture du restaurant</label>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                  <input class="form-input" type="file" id="restaurant-image-file" accept="image/*" style="padding:10px;cursor:pointer" onchange="previewRestImage(this)">
+                  <div class="input-wrapper has-icon-left">
+                    <span class="material-symbols-outlined input-icon-left">link</span>
+                    <input class="form-input" type="url" id="restaurant-image-url" placeholder="Ou coller une URL d'image (ex: https://...)">
+                  </div>
+                  <div id="rest-image-preview-box" style="display:none;width:100%;height:140px;border-radius:12px;overflow:hidden;border:1px solid var(--outline-variant);margin-top:4px">
+                    <img id="rest-image-preview-img" src="" alt="Aperçu photo restaurant" style="width:100%;height:100%;object-fit:cover">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- CGU -->
+          <div class="remember-row">
+            <label class="checkbox-label">
+              <input type="checkbox" id="terms" name="terms" required>
+              <span class="checkmark"></span>
+              <span>J'accepte les <a href="#" class="auth-link" style="font-size:inherit">conditions d'utilisation</a>
+              et la <a href="#" class="auth-link" style="font-size:inherit">politique de confidentialité</a> d'eResto.</span>
+            </label>
+            <span class="form-error hidden" id="terms-error">Vous devez accepter les conditions.</span>
+          </div>
+
+          <!-- Submit -->
+          <button type="submit" class="btn btn-primary btn-lg submit-btn"
+            id="register-submit" style="width:100%;margin-top:16px;border-radius:8px;background-color:#a52d0e;">
+            <span class="btn-text">Créer mon compte</span>
+            <span class="material-symbols-outlined" style="font-size:20px;margin-left:4px;">person_add</span>
+            <span class="btn-spinner hidden"><span class="spinner"></span></span>
+          </button>
+
+        </form>
+
+        <footer class="auth-form-footer" style="border-top:none;margin-top:24px;">
+          <p>Déjà inscrit ? <a href="../../pages/auth/connexion.html" class="auth-link" style="color:#a52d0e;">Se connecter</a></p>
+        </footer>
+
+      </div>
+    </section>
+  </div>
+
+  <!-- Global footer hidden for this view -->
+  <footer class="auth-global-footer" style="display:none;">
+    <div class="auth-footer-brand">eResto</div>
+    <nav class="auth-footer-links">
+      <a href="#">Mentions Légales</a>
+      <a href="#">Confidentialité</a>
+      <a href="#">Contact</a>
+      <a href="#">Aide</a>
+    </nav>
+    <p class="auth-footer-copy">© 2024 eResto. Tous droits réservés.</p>
+  </footer>
+
+  <div id="toast-container"></div>
+  <script src="../../js/app.js"></script>
+  <script src="../../js/inscription.js"></script>
+</body>
+</html>
