@@ -9,7 +9,14 @@ let currentSort = 'popularity';
 // Cart State
 let cart = []; // [{ id, name, price, qty }]
 let orderType = 'delivery'; // 'delivery' | 'takeout'
-const DELIVERY_FEE = 1000;
+
+// Each restaurant sets its own delivery fee from the admin Horaires page;
+// this reads that value live (falls back to 1000 FCFA if never set).
+function getDeliveryFee() {
+  return window.eResto && window.eResto.getDeliveryFee
+    ? window.eResto.getDeliveryFee(currentRestaurantId)
+    : 1000;
+}
 
 // Reservation date-picker state (month currently shown in the calendar)
 let calendarViewYear = null;
@@ -37,17 +44,24 @@ document.addEventListener('DOMContentLoaded', () => {
 
   currentRestaurantName = restaurant.name;
 
+  // Restaurant (owner) accounts can browse restaurants & menus but must
+  // never be able to order or reserve a table — hide that UI for them.
+  const viewerUser = window.eResto && window.eResto.state ? window.eResto.state.currentUser : null;
+  if (viewerUser && viewerUser.type === 'owner') {
+    document.body.classList.add('is-owner-view');
+  }
+
   // Populate Hero Banner
   document.getElementById('rd-image').src = restaurant.image;
   document.getElementById('rd-name').textContent = restaurant.name;
   document.getElementById('rd-category').textContent = restaurant.category;
   document.getElementById('rd-rating').textContent = restaurant.rating;
   
-  const statusBadge = document.getElementById('rd-status');
-  // Read live status from localStorage (set by owner in admin panel)
-  const liveStatus = localStorage.getItem(`eresto_resto_status_${restId}`) || restaurant.status || 'open';
-  statusBadge.className = `status-badge-chip ${liveStatus}`;
-  statusBadge.textContent = liveStatus === 'open' ? 'Ouvert' : liveStatus === 'closed' ? 'Fermé' : 'Très occupé';
+  // Real-time status: manual toggle + actual opening hours, refreshed
+  // periodically so a restaurant closing at, say, 18h flips to "Fermé"
+  // on its own without the visitor reloading the page.
+  updateLiveStatusBadge(restId, restaurant);
+  setInterval(() => updateLiveStatusBadge(restId, restaurant), 30000);
 
   // Load Menu Items
   loadRestaurantMenu(restId);
@@ -81,6 +95,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
   updateCartUI();
 });
+
+function updateLiveStatusBadge(restId, restaurant) {
+  const statusBadge = document.getElementById('rd-status');
+  if (!statusBadge) return;
+  const liveStatus = window.eResto && window.eResto.getLiveRestaurantStatus
+    ? window.eResto.getLiveRestaurantStatus(restId)
+    : (restaurant.status || 'open');
+  statusBadge.className = `status-badge-chip ${liveStatus}`;
+  statusBadge.textContent = liveStatus === 'open' ? 'Ouvert' : liveStatus === 'closed' ? 'Fermé' : 'Très occupé';
+}
 
 function checkRestaurantServices() {
   if (!window.eResto || !window.eResto.getRestaurantServices) return;
@@ -199,7 +223,7 @@ const DEMO_MENUS = {
       price: 4500, 
       description: 'Véritable poulet bicyclette local braisé aux condiments maison, oignons et piment doux.', 
       available: true,
-      image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80',
+      image: `${ERESTO_BASE}assets/images/poulet-bicyclette.png`,
       badge: 'BEST-SELLER',
       badgeClass: 'dish-badge-bestseller',
       popularity: 99
@@ -211,7 +235,7 @@ const DEMO_MENUS = {
       price: 5000, 
       description: 'Poisson capitaine frais braisé au feu de bois avec marinades aux épices de saison.', 
       available: true,
-      image: 'https://images.unsplash.com/photo-1519708227418-c8fd9a32b7a2?auto=format&fit=crop&w=600&q=80',
+      image: `${ERESTO_BASE}assets/images/capitaine-braise.png`,
       badge: 'POPULAIRE',
       badgeClass: 'dish-badge-popular',
       popularity: 94
@@ -223,7 +247,7 @@ const DEMO_MENUS = {
       price: 2500, 
       description: 'Riz gras parfumé à la tomate, poivrons, oignons et sa cuisse de poulet braisée.', 
       available: true,
-      image: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=600&q=80',
+      image: `${ERESTO_BASE}assets/images/riz-gras-poulet.png`,
       badge: 'BEST-SELLER',
       badgeClass: 'dish-badge-bestseller',
       popularity: 96
@@ -235,7 +259,7 @@ const DEMO_MENUS = {
       price: 1500, 
       description: 'Plat traditionnel authentique accompagné d\'une sauce gombo fraîche à la viande.', 
       available: true,
-      image: 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?auto=format&fit=crop&w=600&q=80',
+      image: `${ERESTO_BASE}assets/images/to-sauce-gombo.png`,
       popularity: 82
     },
     { 
@@ -245,7 +269,7 @@ const DEMO_MENUS = {
       price: 1000, 
       description: 'Bananes plantains frites bien dorées et moelleuses.', 
       available: true,
-      image: 'https://images.unsplash.com/photo-1628191010210-a59de33e5941?auto=format&fit=crop&w=600&q=80',
+      image: `${ERESTO_BASE}assets/images/alloco.png`,
       popularity: 89
     },
     { 
@@ -255,7 +279,7 @@ const DEMO_MENUS = {
       price: 500, 
       description: 'Boisson rafraîchissante traditionnelle ou soda local.', 
       available: true,
-      image: 'https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&w=600&q=80',
+      image: `${ERESTO_BASE}assets/images/dolo-sawataux.png`,
       popularity: 80
     }
   ],
@@ -267,7 +291,7 @@ const DEMO_MENUS = {
       price: 5500, 
       description: 'Poulet local rôtie aux condiments Yatenga, servi avec alloco croustillant et sauce maison.', 
       available: true,
-      image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80',
+      image: `${ERESTO_BASE}assets/images/poulet-grille.png`,
       badge: 'BEST-SELLER',
       badgeClass: 'dish-badge-bestseller',
       popularity: 98
@@ -279,7 +303,7 @@ const DEMO_MENUS = {
       price: 6000, 
       description: 'Morceaux de pintade mijotés aux épices royales traditionnelles, soumbala et rabilé.', 
       available: true,
-      image: 'https://images.unsplash.com/photo-1544025162-d76694265947?auto=format&fit=crop&w=600&q=80',
+      image: `${ERESTO_BASE}assets/images/pintade-soumbala.png`,
       badge: 'POPULAIRE',
       badgeClass: 'dish-badge-popular',
       popularity: 94
@@ -301,17 +325,17 @@ const DEMO_MENUS = {
       price: 6500, 
       description: 'Pavé de capitaine poêlé et nappé de sa réduction onctueuse au poivre vert.', 
       available: true,
-      image: 'https://images.unsplash.com/photo-1534422298391-e4f8c172dddb?auto=format&fit=crop&w=600&q=80',
+      image: `${ERESTO_BASE}assets/images/filet-capitaine-poivre-vert.png`,
       popularity: 90
     },
     { 
       id: 305, 
-      name: 'Coupe Glacée L\'Eau Vive', 
+      name: 'Coupe Gourmande Choco-Noisette', 
       category: 'Desserts', 
       price: 2500, 
-      description: 'Création glacée maison aux fruits tropicaux et chantilly fraîche.', 
+      description: 'Glace chocolat et vanille, chantilly maison, noisettes concassées et copeaux de chocolat.', 
       available: true,
-      image: 'https://images.unsplash.com/photo-1556881286-fc6915169721?auto=format&fit=crop&w=600&q=80',
+      image: `${ERESTO_BASE}assets/images/coupe-glacee-choco-noisette.png`,
       popularity: 88
     }
   ],
@@ -407,7 +431,7 @@ function loadRestaurantMenu(restId) {
         price: 4000, 
         description: 'Poulet local braisé aux épices et oignons.', 
         available: true,
-        image: 'https://images.unsplash.com/photo-1598515214211-89d3c73ae83b?auto=format&fit=crop&w=600&q=80',
+        image: `${ERESTO_BASE}assets/images/poulet-bicyclette.png`,
         badge: 'BEST-SELLER',
         badgeClass: 'dish-badge-bestseller',
         popularity: 95
@@ -419,7 +443,7 @@ function loadRestaurantMenu(restId) {
         price: 2500, 
         description: 'Riz gras parfumé servi avec cuisse de poulet.', 
         available: true,
-        image: 'https://images.unsplash.com/photo-1604382354936-07c5d9983bd3?auto=format&fit=crop&w=600&q=80',
+        image: `${ERESTO_BASE}assets/images/riz-gras-poulet.png`,
         popularity: 90
       },
       { 
@@ -429,7 +453,7 @@ function loadRestaurantMenu(restId) {
         price: 1000, 
         description: 'Bananes plantains frites dorées.', 
         available: true,
-        image: 'https://images.unsplash.com/photo-1628191010210-a59de33e5941?auto=format&fit=crop&w=600&q=80',
+        image: `${ERESTO_BASE}assets/images/alloco.png`,
         popularity: 88
       },
       { 
@@ -592,6 +616,14 @@ function renderDishesGrid() {
    ===================================================== */
 
 function addToCart(dishId) {
+  const currentUser = window.eResto && window.eResto.state ? window.eResto.state.currentUser : null;
+  if (currentUser && currentUser.type === 'owner') {
+    if (window.eResto.showToast) {
+      window.eResto.showToast('Les comptes restaurant ne peuvent pas commander ni réserver de table.', 'warning');
+    }
+    return;
+  }
+
   const item = rawMenuData.find(d => d.id === dishId);
   if (!item || item.available === false) return;
 
@@ -699,7 +731,8 @@ function toggleOrderType(type) {
 
 function renderCartSummary() {
   const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-  const fee = orderType === 'delivery' ? DELIVERY_FEE : 0;
+  const deliveryFee = getDeliveryFee();
+  const fee = orderType === 'delivery' ? deliveryFee : 0;
   const total = subtotal + fee;
 
   const formatCurrency = (val) => {
@@ -711,9 +744,11 @@ function renderCartSummary() {
 
   const subtotalEl = document.getElementById('summary-subtotal');
   const totalEl = document.getElementById('summary-total');
+  const feeEl = document.getElementById('summary-delivery-fee');
 
   if (subtotalEl) subtotalEl.textContent = formatCurrency(subtotal);
   if (totalEl) totalEl.textContent = formatCurrency(total);
+  if (feeEl) feeEl.textContent = formatCurrency(deliveryFee);
 }
 
 function openCartModal() {
@@ -727,8 +762,11 @@ function openCartModal() {
     }
   }
 
-  // Block orders if restaurant is currently closed
-  const liveStatus = localStorage.getItem(`eresto_resto_status_${currentRestaurantId}`) || 'open';
+  // Block orders if restaurant is currently closed (manual toggle OR
+  // simply because it's outside the hours the restaurant configured)
+  const liveStatus = window.eResto && window.eResto.getLiveRestaurantStatus
+    ? window.eResto.getLiveRestaurantStatus(currentRestaurantId)
+    : 'open';
   if (liveStatus === 'closed') {
     if (window.eResto && window.eResto.showToast) {
       window.eResto.showToast('Ce restaurant est fermé et n\'accepte pas de commandes pour le moment.', 'warning');
@@ -812,6 +850,18 @@ function checkAuthBeforeAction(actionType) {
     if (modal) modal.classList.add('active');
     return false;
   }
+
+  // Restaurant (owner) accounts can browse but never order or reserve —
+  // that's reserved for client accounts.
+  if (currentUser.type === 'owner' && (actionType === 'cart' || actionType === 'order' || actionType === 'reserve')) {
+    closeCartModal();
+    closeReserveModal();
+    if (window.eResto && window.eResto.showToast) {
+      window.eResto.showToast('Les comptes restaurant ne peuvent pas commander ni réserver de table.', 'warning');
+    }
+    return false;
+  }
+
   return true;
 }
 
@@ -866,7 +916,7 @@ function handleOrderSubmit(e) {
   const note = document.getElementById('cust-note').value.trim();
 
   const subtotal = cart.reduce((sum, i) => sum + (i.price * i.qty), 0);
-  const fee = orderType === 'delivery' ? DELIVERY_FEE : 0;
+  const fee = orderType === 'delivery' ? getDeliveryFee() : 0;
   const total = subtotal + fee;
 
   const orderNum = `#C-${Math.floor(1000 + Math.random() * 9000)}`;

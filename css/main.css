@@ -64,6 +64,23 @@
   --brand-green: #2E9E5B;
   --brand-cream: #FDF1EE;
 
+  /* Cream surface used by the landing/auth header bar */
+  --cream-bg: #fdf5f2;
+
+  /* Neutral grays used inline throughout the app (chips, borders, helper
+     text) — themed so components that reference them stay legible in
+     dark mode without needing per-component overrides. */
+  --gray-50: #f9fafb;
+  --gray-100: #f3f4f6;
+  --gray-200: #e5e7eb;
+  --gray-300: #d1d5db;
+  --gray-400: #9ca3af;
+  --gray-500: #6b7280;
+  --gray-600: #4b5563;
+  --gray-700: #374151;
+  --gray-800: #1f2937;
+  --gray-900: #111827;
+
   /* Typography */
   --font-display: 'Plus Jakarta Sans', sans-serif;
   --font-body: 'Inter', sans-serif;
@@ -102,6 +119,84 @@
 }
 
 /* =====================================================
+   DARK THEME
+   Same brand hues (orange / green / amber), remapped onto a
+   warm charcoal surface scale so contrast stays comfortable.
+   Toggled via [data-theme="dark"] on <html>.
+   ===================================================== */
+html[data-theme="dark"] {
+  /* Brand Colors */
+  --primary: #ff8562;
+  --primary-dark: #ffb4a2;
+  --primary-container: #ff8562;
+  --on-primary: #4a1300;
+  --on-primary-container: #ffdad2;
+  --inverse-primary: #ab2f0f;
+  --primary-fixed: #ab2f0f;
+  --primary-fixed-dim: #7d2208;
+
+  /* Secondary (Green) */
+  --secondary: #63dc94;
+  --secondary-dark: #8af6a9;
+  --secondary-container: #00522a;
+  --on-secondary: #00391c;
+  --on-secondary-container: #8af6a9;
+
+  /* Tertiary (Amber) */
+  --tertiary: #f3ab53;
+  --tertiary-container: #a16900;
+  --on-tertiary: #452b00;
+
+  /* Surfaces */
+  --surface: #16130f;
+  --surface-bright: #3a332d;
+  --surface-dim: #16130f;
+  --surface-variant: #4d4038;
+  --surface-container-lowest: #100d0a;
+  --surface-container-low: #1e1a15;
+  --surface-container: #221e19;
+  --surface-container-high: #2c2723;
+  --surface-container-highest: #38322d;
+  --inverse-surface: #e5e2e1;
+
+  /* On-Surface Text */
+  --on-surface: #ece0da;
+  --on-surface-variant: #d8c2b8;
+  --on-background: #ece0da;
+  --inverse-on-surface: #1c1b1b;
+
+  /* Utility */
+  --outline: #8d716a;
+  --outline-variant: #4d4038;
+  --outline-dark: #d8c2b8;
+  --background: #16130f;
+  --error: #ffb4ab;
+  --on-error: #690005;
+  --error-container: #93000a;
+
+  /* Cream header bar becomes a dark surface instead of going white-on-dark */
+  --cream-bg: #221e19;
+
+  /* Neutral grays remapped so chip/border/helper-text colors used inline
+     across the app stay legible on dark surfaces. */
+  --gray-50: #221e19;
+  --gray-100: #2c2723;
+  --gray-200: #38322d;
+  --gray-300: #4d4038;
+  --gray-400: #8d716a;
+  --gray-500: #a89a92;
+  --gray-600: #c7b9b1;
+  --gray-700: #d8c2b8;
+  --gray-800: #ece0da;
+  --gray-900: #fcf9f8;
+
+  /* Shadows read as pure black glow against dark surfaces, so soften them */
+  --shadow-card: 0px 4px 14px rgba(0, 0, 0, 0.35);
+  --shadow-card-hover: 0px 8px 24px rgba(0, 0, 0, 0.45);
+  --shadow-modal: 0px 20px 60px rgba(0, 0, 0, 0.55);
+}
+
+/* =====================================================
    RESET & BASE
    ===================================================== */
 *, *::before, *::after {
@@ -132,7 +227,14 @@ body {
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
   opacity: 0;
-  transition: opacity 0.2s ease-out;
+  transition: opacity 0.2s ease-out, background-color 0.25s ease, color 0.25s ease;
+}
+
+/* Give the most common surface/background/border properties a gentle
+   transition so switching theme doesn't feel like a hard flash. */
+body, header, .topbar, .sidebar, .main-content,
+[class*="card"], [class*="modal"], [class*="panel"] {
+  transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 body.app-ready {
@@ -1313,3 +1415,67 @@ input, select, textarea {
   text-align: center;
 }
 
+
+/* =====================================================
+   THEME TOGGLE (light / dark)
+   ===================================================== */
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: 1.5px solid var(--outline-variant);
+  background: var(--surface-container-lowest);
+  color: var(--on-surface-variant);
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--primary);
+  color: var(--primary);
+  transform: translateY(-1px);
+}
+
+.theme-toggle-btn .material-symbols-outlined {
+  font-size: 20px;
+}
+
+/* Show the sun icon in dark mode (tap to go light) and the moon icon in
+   light mode (tap to go dark). */
+.theme-toggle-btn .icon-dark { display: none; }
+html[data-theme="dark"] .theme-toggle-btn .icon-light { display: none; }
+html[data-theme="dark"] .theme-toggle-btn .icon-dark { display: inline-flex; }
+
+/* Compact variant used inside sidebars / dropdown-style menus where a
+   full circular button would be too wide. */
+.theme-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  width: 100%;
+  padding: 10px 14px;
+  border-radius: var(--radius-md);
+  border: none;
+  background: none;
+  color: var(--on-surface-variant);
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.theme-toggle-row:hover {
+  background: var(--surface-container);
+}
+
+.theme-toggle-row .theme-toggle-row-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}

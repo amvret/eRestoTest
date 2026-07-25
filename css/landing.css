@@ -4,7 +4,7 @@
    ===================================================== */
 
 .landing-page {
-  background: #fdf5f2;
+  background: var(--cream-bg);
   color: var(--on-surface);
   font-family: 'Plus Jakarta Sans', var(--font-body);
   min-height: 100vh;
@@ -590,4 +590,45 @@
 @media (max-width: 400px) {
   .features-grid { gap: 16px; }
   .hero-img { height: 240px; }
+}
+
+/* =====================================================
+   DARK MODE OVERRIDES
+   Footer & promo banner already read fine as-is (footer is
+   dark-on-dark by design, promo banner is a colored amber
+   card) — only the light neutral surfaces need remapping.
+   ===================================================== */
+html[data-theme="dark"] .landing-brand,
+html[data-theme="dark"] .hero-title,
+html[data-theme="dark"] .hero-search-input,
+html[data-theme="dark"] .feature-title,
+html[data-theme="dark"] .section-title-lg,
+html[data-theme="dark"] .restaurant-name,
+html[data-theme="dark"] .rating-badge,
+html[data-theme="dark"] .landing-nav-toggle {
+  color: var(--on-surface);
+}
+
+html[data-theme="dark"] .landing-nav-link {
+  color: var(--on-surface-variant);
+}
+
+html[data-theme="dark"] .hero-subtitle,
+html[data-theme="dark"] .feature-desc,
+html[data-theme="dark"] .restaurant-meta {
+  color: var(--on-surface-variant);
+}
+
+html[data-theme="dark"] .hero-search-box,
+html[data-theme="dark"] .feature-card,
+html[data-theme="dark"] .restaurant-card {
+  background: var(--surface-container-lowest);
+}
+
+html[data-theme="dark"] .landing-nav-toggle:hover {
+  background: rgba(255, 255, 255, 0.08);
+}
+
+html[data-theme="dark"] .landing-nav-actions {
+  border-top-color: var(--outline-variant);
 }

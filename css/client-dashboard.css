@@ -361,3 +361,66 @@
   .client-title { font-size: 22px; }
   .rd-modal { padding: 22px; }
 }
+
+/* =====================================================
+   DARK MODE OVERRIDES
+   ===================================================== */
+html[data-theme="dark"] .client-hero {
+  background: linear-gradient(135deg, #1a1108 0%, #2b1d19 100%);
+}
+
+html[data-theme="dark"] .client-tabs {
+  border-bottom-color: var(--outline-variant);
+}
+
+html[data-theme="dark"] .client-tab {
+  color: var(--on-surface-variant);
+}
+
+html[data-theme="dark"] .client-section-header h2,
+html[data-theme="dark"] .order-card-rest-name,
+html[data-theme="dark"] .rd-form-label,
+html[data-theme="dark"] .rd-btn-outline,
+html[data-theme="dark"] .rd-form-input {
+  color: var(--on-surface);
+}
+
+html[data-theme="dark"] .client-section-header p {
+  color: var(--on-surface-variant);
+}
+
+html[data-theme="dark"] .order-history-card,
+html[data-theme="dark"] .client-review-card,
+html[data-theme="dark"] .rd-modal,
+html[data-theme="dark"] .empty-history-state {
+  background: var(--surface-container-lowest);
+  border-color: var(--outline-variant);
+}
+
+html[data-theme="dark"] .order-card-header {
+  border-bottom-color: var(--outline-variant);
+}
+
+html[data-theme="dark"] .order-item-chip {
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+}
+
+html[data-theme="dark"] .rd-form-input {
+  background: var(--surface-container);
+  border-color: var(--outline-variant);
+}
+
+html[data-theme="dark"] .rd-btn-outline {
+  border-color: var(--outline-variant);
+}
+
+html[data-theme="dark"] .rd-btn-outline:hover {
+  background: var(--surface-container);
+  border-color: var(--outline);
+}
+
+html[data-theme="dark"] .star-btn,
+html[data-theme="dark"] .star-btn-q {
+  color: var(--outline);
+}

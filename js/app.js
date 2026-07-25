@@ -88,6 +88,7 @@ const eResto = {
     this.initStatusPill();
     this.initMobileMenu();
     this.initLandingNavMobile();
+    this.initThemeToggle();
     this.initRestaurantEditButton();
     this.updateUserUI();
     console.log(`%ceResto v${this.version} initialized`, 'color: #f0603d; font-weight: bold;');
@@ -357,6 +358,97 @@ const eResto = {
     return this.state.totalTables || 10;
   },
 
+  /* =====================================================
+     LIVE (REAL-TIME) RESTAURANT STATUS
+     Combines the owner's manual toggle (Ouvert / Occupé / Fermé) with the
+     actual opening hours set on the Horaires page, so a restaurant that
+     says it closes at 18h really flips to "Fermé" the instant 18h hits —
+     everywhere it's shown (topbar pill, restaurant cards, detail page) —
+     without anyone needing to reload the page or touch the toggle.
+     ===================================================== */
+
+  // Reads the public weekly schedule published by horaires.js for a given
+  // restaurant. Returns null if that restaurant never configured hours,
+  // so we know not to let "missing data" masquerade as "closed".
+  getPublishedHoraires(restId) {
+    if (!restId) return null;
+    const saved = localStorage.getItem(`eresto_horaires_${restId}`);
+    if (!saved) return null;
+    try {
+      const parsed = JSON.parse(saved);
+      return Array.isArray(parsed) && parsed.length ? parsed : null;
+    } catch (e) { return null; }
+  },
+
+  // true/false if the configured hours say the restaurant should be open
+  // right now, or null if it never set up hours (so hours can't override).
+  isOpenByScheduleNow(restId) {
+    const schedule = this.getPublishedHoraires(restId);
+    if (!schedule) return null;
+
+    const now = new Date();
+    const dayIdx = (now.getDay() + 6) % 7; // 0 = lundi, matches horaires.js
+    const today = schedule[dayIdx];
+    if (!today || !today.isOpen) return false;
+
+    const toMin = (t) => {
+      if (!t) return null;
+      const [hh, mm] = t.split(':').map(Number);
+      return hh * 60 + mm;
+    };
+    const nowMin   = now.getHours() * 60 + now.getMinutes();
+    const openMin  = toMin(today.open);
+    const closeMin = toMin(today.close);
+    if (openMin === null || closeMin === null) return true; // incomplete data, don't force closed
+
+    const inPause = !!today.pauseActive
+      && toMin(today.pauseDebut) !== null && toMin(today.pauseFin) !== null
+      && nowMin >= toMin(today.pauseDebut) && nowMin < toMin(today.pauseFin);
+
+    return nowMin >= openMin && nowMin < closeMin && !inPause;
+  },
+
+  // Single source of truth for a restaurant's displayed status everywhere
+  // in the app. The owner's manual "Occupé"/"Fermé" choice is always
+  // respected (lets them close early or flag a rush), but manual "Ouvert"
+  // can never force the restaurant open outside its configured hours —
+  // once closing time hits, this automatically returns "closed".
+  getLiveRestaurantStatus(restId) {
+    const manual = restId ? localStorage.getItem(`eresto_resto_status_${restId}`) : null;
+    if (manual === 'closed' || manual === 'busy') return manual;
+
+    const scheduleOpen = this.isOpenByScheduleNow(restId);
+    if (scheduleOpen === false) return 'closed';
+    return 'open';
+  },
+
+  // Re-evaluates the live status for the current admin's own restaurant
+  // and refreshes the topbar pill immediately — called whenever hours are
+  // edited, and on a timer so the pill updates itself in real time even
+  // if nobody touches anything.
+  refreshLiveStatusUI() {
+    const restId = this.getMyRestaurantId();
+    const status = this.getLiveRestaurantStatus(restId);
+    this.state.restaurantStatus = status;
+    this.updateStatusUI(status);
+  },
+
+  /* =====================================================
+     DELIVERY FEE — set by each restaurant on the Horaires page
+     ===================================================== */
+  getDeliveryFee(restId) {
+    const saved = restId ? localStorage.getItem(`eresto_delivery_fee_${restId}`) : null;
+    const fee = saved !== null ? parseInt(saved, 10) : NaN;
+    return Number.isFinite(fee) && fee >= 0 ? fee : 1000;
+  },
+
+  setDeliveryFee(restId, fee) {
+    if (!restId) return this.getDeliveryFee(restId);
+    const n = Math.max(0, parseInt(fee, 10) || 0);
+    localStorage.setItem(`eresto_delivery_fee_${restId}`, String(n));
+    return n;
+  },
+
   getRestaurantServices(restId) {
     const targetId = restId || (this.state.currentUser ? this.state.currentUser.id : 'demo');
     const key = `eresto_services_${targetId}`;
@@ -560,23 +652,23 @@ const eResto = {
 
   initStatusPill() {
     const statusPill = document.getElementById('restaurant-status');
+    if (!statusPill) return;
 
-    // Read status from the restaurant-scoped key (readable by client side)
-    const restId = this.getMyRestaurantId();
-    const restoKey = restId ? `eresto_resto_status_${restId}` : null;
-    const status = (restoKey && localStorage.getItem(restoKey))
-      || localStorage.getItem('eresto_status')
-      || 'open';
+    // Compute the live status (manual toggle + real opening hours) rather
+    // than just reading the raw manual value, so the pill is correct the
+    // moment the page loads.
+    this.refreshLiveStatusUI();
 
-    this.state.restaurantStatus = status;
-    this.updateStatusUI(status);
+    statusPill.addEventListener('click', () => {
+      const menu = document.getElementById('status-menu');
+      if (menu) menu.classList.toggle('visible');
+    });
 
-    if (statusPill) {
-      statusPill.addEventListener('click', () => {
-        const menu = document.getElementById('status-menu');
-        if (menu) menu.classList.toggle('visible');
-      });
-    }
+    // Keep the pill honest in real time: re-check every 30s so a
+    // restaurant that closes at 18h actually flips to "Fermé" at 18h,
+    // with no reload needed.
+    if (this._statusInterval) clearInterval(this._statusInterval);
+    this._statusInterval = setInterval(() => this.refreshLiveStatusUI(), 30000);
   },
 
   setRestaurantStatus(status) {
@@ -595,7 +687,10 @@ const eResto = {
     }
     localStorage.setItem('eresto_status', status);
 
-    this.updateStatusUI(status);
+    // Re-derive the effective status (manual choice + real opening hours)
+    // instead of blindly showing what was clicked — e.g. clicking "Ouvert"
+    // after closing time still shows "Fermé" until the hours say otherwise.
+    this.refreshLiveStatusUI();
     const labels = { open: 'Ouvert', closed: 'Fermé', busy: 'Très occupé' };
     this.showToast(`Statut du restaurant: ${labels[status] || status}`, 'success');
     const menu = document.getElementById('status-menu');
@@ -687,6 +782,88 @@ const eResto = {
         toggleBtn.innerHTML = '<span class="material-symbols-outlined">menu</span>';
       }
     });
+  },
+
+  // =====================================================
+  // DARK MODE
+  // A tiny inline script in each page's <head> already applies the saved
+  // (or system) preference before first paint, to avoid a flash of the
+  // wrong theme. This just wires up the toggle button + keeps it in sync.
+  // =====================================================
+  getTheme() {
+    return document.documentElement.getAttribute('data-theme') === 'dark' ? 'dark' : 'light';
+  },
+
+  setTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    try {
+      localStorage.setItem('eresto-theme', theme);
+    } catch (e) { /* localStorage unavailable — theme just won't persist */ }
+    document.querySelectorAll('.theme-toggle-btn, .theme-toggle-row').forEach(btn => {
+      btn.setAttribute('aria-pressed', String(theme === 'dark'));
+    });
+  },
+
+  toggleTheme() {
+    this.setTheme(this.getTheme() === 'dark' ? 'light' : 'dark');
+  },
+
+  // Builds the small sun/moon toggle button markup shared by every
+  // insertion point (public header, admin/client topbar, sidebar footer).
+  buildThemeToggleButton(variant) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.setAttribute('aria-label', 'Basculer le mode sombre');
+    btn.setAttribute('aria-pressed', String(this.getTheme() === 'dark'));
+
+    if (variant === 'row') {
+      btn.className = 'theme-toggle-row';
+      btn.innerHTML = `
+        <span class="theme-toggle-row-label">
+          <span class="material-symbols-outlined icon-light">light_mode</span>
+          <span class="material-symbols-outlined icon-dark">dark_mode</span>
+          Mode sombre
+        </span>
+        <span class="material-symbols-outlined" style="font-size:18px">swap_horiz</span>
+      `;
+    } else {
+      btn.className = 'theme-toggle-btn';
+      btn.innerHTML = `
+        <span class="material-symbols-outlined icon-light">dark_mode</span>
+        <span class="material-symbols-outlined icon-dark">light_mode</span>
+      `;
+    }
+
+    btn.addEventListener('click', () => this.toggleTheme());
+    return btn;
+  },
+
+  // Injects a theme toggle into whichever nav shell is present on the
+  // current page: the public landing header, the admin/client topbar, or
+  // (as a fallback) the sidebar footer.
+  initThemeToggle() {
+    if (document.querySelector('.theme-toggle-btn, .theme-toggle-row')) return;
+
+    // Public pages (landing, à propos, restaurant detail, auth, restaurants list)
+    const landingActions = document.querySelector('.landing-nav-actions');
+    if (landingActions) {
+      landingActions.insertBefore(this.buildThemeToggleButton('icon'), landingActions.firstChild);
+    }
+
+    // Admin / client dashboards
+    const topbarRight = document.querySelector('.topbar-right');
+    if (topbarRight) {
+      topbarRight.insertBefore(this.buildThemeToggleButton('icon'), topbarRight.firstChild);
+    }
+
+    // Fallback: sidebar footer (keeps the option reachable even on pages
+    // without a topbar-right or landing nav, e.g. narrow custom layouts)
+    if (!landingActions && !topbarRight) {
+      const sidebarFooter = document.querySelector('.sidebar-footer');
+      if (sidebarFooter) {
+        sidebarFooter.insertBefore(this.buildThemeToggleButton('row'), sidebarFooter.firstChild);
+      }
+    }
   },
 
   /* =====================================================

@@ -265,3 +265,25 @@
   .ap-features-grid { grid-template-columns: 1fr; }
   .ap-tabs { flex-wrap: wrap; }
 }
+
+/* =====================================================
+   DARK MODE OVERRIDES
+   ===================================================== */
+html[data-theme="dark"] .ap-hero {
+  background: linear-gradient(to bottom, var(--surface-container), var(--surface));
+}
+
+html[data-theme="dark"] .ap-tab-btn,
+html[data-theme="dark"] .ap-step-card,
+html[data-theme="dark"] .ap-faq-item {
+  background: var(--surface-container-lowest);
+}
+
+html[data-theme="dark"] .ap-faq-item {
+  border-color: var(--outline-variant);
+  box-shadow: 0 3px 14px rgba(0, 0, 0, 0.25);
+}
+
+html[data-theme="dark"] .ap-step-card {
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.3);
+}

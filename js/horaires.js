@@ -37,6 +37,10 @@ document.addEventListener('DOMContentLoaded', () => {
   renderHoraires();
   updateCurrentStatus();
   publishHorairesForClients();
+  renderDeliveryFee();
+
+  // Keep the "today" banner live even if nobody touches the page.
+  setInterval(updateCurrentStatus, 30000);
 });
 
 // =====================================================
@@ -97,9 +101,17 @@ function publishHorairesForClients() {
       isOpen: !!day.open,
       open: day.debut || '',
       close: day.fin || '',
+      pauseActive: !!day.pauseActive,
+      pauseDebut: day.pauseDebut || '',
+      pauseFin: day.pauseFin || '',
     };
   });
   localStorage.setItem(`eresto_horaires_${restId}`, JSON.stringify(publicSchedule));
+
+  // Hours just changed — recompute the real-time status right away so the
+  // topbar pill (and, on other tabs, the public pages) reflect it instantly
+  // instead of waiting for the next 30s tick.
+  if (window.eResto && eResto.refreshLiveStatusUI) eResto.refreshLiveStatusUI();
 }
 
 // =====================================================
@@ -321,6 +333,27 @@ function presetWeekdays() {
   renderHoraires();
   updateCurrentStatus();
   eResto.showToast('Jours de travail configurés : Lun – Sam.', 'success');
+}
+
+// =====================================================
+// DELIVERY FEE
+// =====================================================
+function renderDeliveryFee() {
+  const input = document.getElementById('delivery-fee-input');
+  if (!input) return;
+  const restId = eResto.getMyRestaurantId ? eResto.getMyRestaurantId() : null;
+  input.value = eResto.getDeliveryFee(restId);
+}
+
+function saveDeliveryFee() {
+  const input = document.getElementById('delivery-fee-input');
+  if (!input) return;
+  const restId = eResto.getMyRestaurantId ? eResto.getMyRestaurantId() : null;
+  if (!restId) return;
+
+  const saved = eResto.setDeliveryFee(restId, input.value);
+  input.value = saved;
+  eResto.showToast(`Frais de livraison mis à jour : ${eResto.formatCurrency ? eResto.formatCurrency(saved) : saved + ' FCFA'}.`, 'success');
 }
 
 function presetAllOpen() {

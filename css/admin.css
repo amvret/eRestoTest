@@ -107,7 +107,7 @@
   position: absolute;
   right: 0;
   top: calc(100% + 4px);
-  background: white;
+  background: var(--surface-container-lowest);
   border: 1px solid var(--outline-variant);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-modal);

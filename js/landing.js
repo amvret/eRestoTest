@@ -55,14 +55,20 @@ let currentSearchQuery = '';
 document.addEventListener('DOMContentLoaded', () => {
   renderRestaurants();
   initSearch();
+
+  // Keep "Ouvert / Fermé" badges live: a restaurant closing at a set hour
+  // should flip to "Fermé" on its own, without the client reloading.
+  setInterval(renderRestaurants, 30000);
 });
 
 // Load registered user restaurants + demo
 function getAllRestaurants() {
   // Read live status for each default restaurant from localStorage
   const defaultList = DEFAULT_RESTAURANTS.map(r => {
-    const savedStatus = localStorage.getItem(`eresto_resto_status_${r.id}`);
-    return { ...r, status: savedStatus || r.status };
+    const liveStatus = window.eResto && eResto.getLiveRestaurantStatus
+      ? eResto.getLiveRestaurantStatus(r.id)
+      : (localStorage.getItem(`eresto_resto_status_${r.id}`) || r.status);
+    return { ...r, status: liveStatus };
   });
 
   const list = [...defaultList];
@@ -77,9 +83,9 @@ function getAllRestaurants() {
     if (!list.some(r => r.name.toLowerCase() === name.toLowerCase())) {
       const img = user.restaurantImage || SAMPLE_IMAGES[idx % SAMPLE_IMAGES.length];
       const restId = `user-rest-${user.id}`;
-      const savedStatus = localStorage.getItem(`eresto_resto_status_${restId}`)
-        || localStorage.getItem(`eresto_status_${user.id}`);
-      const rStatus = savedStatus === 'closed' ? 'closed' : savedStatus === 'busy' ? 'busy' : 'open';
+      const rStatus = window.eResto && eResto.getLiveRestaurantStatus
+        ? eResto.getLiveRestaurantStatus(restId)
+        : 'open';
       list.push({
         id: restId,
         name: name,

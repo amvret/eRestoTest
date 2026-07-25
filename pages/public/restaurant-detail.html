@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
+  <script>(function(){try{var t=localStorage.getItem('eresto-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Détail du Restaurant | eResto</title>
@@ -16,7 +18,7 @@
 <body class="landing-page">
 
   <!-- Header Navbar -->
-  <header style="background: #fdf5f2; border-bottom: 1px solid rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
+  <header style="background: var(--cream-bg); border-bottom: 1px solid rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
     <nav class="landing-nav">
       <a href="../../index.html" class="landing-brand">
         <span class="material-symbols-outlined landing-brand-icon">restaurant</span>
@@ -71,7 +73,7 @@
       </div>
 
       <!-- Quick Action Card -->
-      <div class="rd-sidebar-card">
+      <div class="rd-sidebar-card" id="rd-order-reserve-card">
         <h3 style="font-family:var(--font-display);font-size:18px;font-weight:800;margin-bottom:12px;">Réservation & Service</h3>
         <p style="font-size:13px;color:#6b554f;margin-bottom:20px;line-height:1.5;">Réservez votre table à l'avance pour profiter d'un service personnalisé.</p>
         
@@ -223,7 +225,7 @@
             </div>
             <div class="rd-summary-row" id="summary-delivery-row">
               <span>Frais de livraison</span>
-              <span>1 000 FCFA</span>
+              <span id="summary-delivery-fee">1 000 FCFA</span>
             </div>
             <div class="rd-summary-row rd-summary-total">
               <span>TOTAL À PAYER</span>

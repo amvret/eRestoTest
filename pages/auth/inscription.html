@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="fr" class="light">
 <head>
+  <script>(function(){try{var t=localStorage.getItem('eresto-theme');if(!t){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.setAttribute('data-theme',t);}catch(e){}})();</script>
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Inscription | eResto</title>
@@ -12,7 +14,7 @@
 <body class="auth-body">
 
   <!-- Header Navbar -->
-  <header style="background: #fdf5f2; border-bottom: 1px solid rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
+  <header style="background: var(--cream-bg); border-bottom: 1px solid rgba(0,0,0,0.04); position: sticky; top: 0; z-index: 100; backdrop-filter: blur(10px);">
     <nav class="landing-nav">
       <a href="../../index.html" class="landing-brand">
         <span class="material-symbols-outlined landing-brand-icon">restaurant</span>

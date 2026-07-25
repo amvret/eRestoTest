@@ -971,3 +971,112 @@
   border-color: var(--primary, #f0603d);
   color: #fff;
 }
+
+/* =====================================================
+   OWNER (RESTAURANT ACCOUNT) VIEW
+   Restaurant accounts can browse menus/restaurants but must
+   never be able to order or reserve a table — hide that UI
+   entirely for them (in addition to the JS-side guard).
+   ===================================================== */
+body.is-owner-view #rd-order-reserve-card,
+body.is-owner-view #floating-cart-btn,
+body.is-owner-view .dish-add-btn {
+  display: none !important;
+}
+
+/* Give the dishes grid the full sidebar-free width feel by letting the
+   remaining sidebar content (categories) keep its normal layout — no
+   extra change needed since the action card simply collapses away. */
+
+/* =====================================================
+   DARK MODE OVERRIDES
+   ===================================================== */
+html[data-theme="dark"] .rd-categories-card,
+html[data-theme="dark"] .rd-sidebar-card,
+html[data-theme="dark"] .dish-card,
+html[data-theme="dark"] .rd-modal,
+html[data-theme="dark"] .rd-modal-header,
+html[data-theme="dark"] .rd-date-calendar,
+html[data-theme="dark"] .rd-table-btn {
+  background: var(--surface-container-lowest);
+  border-color: var(--outline-variant);
+}
+
+html[data-theme="dark"] .rd-categories-title,
+html[data-theme="dark"] .rd-section-heading,
+html[data-theme="dark"] .rd-sort-select,
+html[data-theme="dark"] .dish-title,
+html[data-theme="dark"] .rd-modal-title,
+html[data-theme="dark"] .rd-cart-item-title,
+html[data-theme="dark"] .rd-radio-card div strong,
+html[data-theme="dark"] .rd-form-label,
+html[data-theme="dark"] .rd-form-input,
+html[data-theme="dark"] .rd-cal-month-label,
+html[data-theme="dark"] .rd-cal-nav,
+html[data-theme="dark"] .rd-cal-day,
+html[data-theme="dark"] .rd-table-btn {
+  color: var(--on-surface);
+}
+
+html[data-theme="dark"] .rd-category-item {
+  color: var(--on-surface-variant);
+}
+
+html[data-theme="dark"] .rd-category-item.active {
+  background: rgba(255, 133, 98, 0.12);
+}
+
+html[data-theme="dark"] .rd-category-count,
+html[data-theme="dark"] .rd-modal-close,
+html[data-theme="dark"] .rd-cal-nav,
+html[data-theme="dark"] .rd-qty-btn:hover {
+  background: var(--surface-container);
+  color: var(--on-surface-variant);
+}
+
+html[data-theme="dark"] .rd-modal-close:hover,
+html[data-theme="dark"] .rd-cal-nav:hover:not(:disabled) {
+  background: var(--surface-container-high);
+}
+
+html[data-theme="dark"] .rd-sort-select,
+html[data-theme="dark"] .rd-form-input,
+html[data-theme="dark"] .rd-cart-item,
+html[data-theme="dark"] .rd-qty-controls,
+html[data-theme="dark"] .rd-radio-card,
+html[data-theme="dark"] .rd-cart-summary {
+  background: var(--surface-container);
+  border-color: var(--outline-variant);
+}
+
+html[data-theme="dark"] .rd-radio-card.active {
+  background: rgba(255, 133, 98, 0.12);
+}
+
+html[data-theme="dark"] .dish-desc,
+html[data-theme="dark"] .rd-modal-subtitle,
+html[data-theme="dark"] .rd-radio-card div small,
+html[data-theme="dark"] .rd-summary-row,
+html[data-theme="dark"] .rd-qty-btn {
+  color: var(--on-surface-variant);
+}
+
+html[data-theme="dark"] .rd-summary-total {
+  color: var(--on-surface);
+}
+
+html[data-theme="dark"] .dish-add-btn:disabled {
+  background: var(--surface-container-high);
+  color: var(--outline);
+}
+
+html[data-theme="dark"] .rd-cal-day:disabled,
+html[data-theme="dark"] .rd-cal-dot-closed,
+html[data-theme="dark"] .rd-cal-weekdays span,
+html[data-theme="dark"] .rd-cal-legend {
+  color: var(--outline);
+}
+
+html[data-theme="dark"] .rd-cal-day:hover:not(:disabled):not(.rd-cal-empty) {
+  background: rgba(255, 133, 98, 0.12);
+}
